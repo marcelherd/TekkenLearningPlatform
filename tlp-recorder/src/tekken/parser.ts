@@ -1,0 +1,184 @@
+export function parseDirection(direction: number): string {
+  switch (direction) {
+    case 2:
+      return 'd/b';
+    case 4:
+      return 'd';
+    case 8:
+      return 'd/f';
+    case 16:
+      return 'b';
+    case 32:
+      return 'n';
+    case 64:
+      return 'f';
+    case 128:
+      return 'u/b';
+    case 256:
+      return 'u';
+    case 512:
+      return 'u/f';
+    default:
+      return '';
+  }
+}
+
+export function parseAttack(attack: number): string {
+  switch (attack) {
+    case 512:
+      return '1';
+    case 1024:
+      return '2';
+    case 2048:
+      return '3';
+    case 4096:
+      return '4';
+    case 1536:
+      return '1+2';
+    case 2560:
+      return '1+3';
+    case 4608:
+      return '1+4';
+    case 3072:
+      return '2+3';
+    case 6144:
+      return '3+4';
+    case 3584:
+      return '1+2+3';
+    case 6656:
+      return '1+3+4';
+    case 7168:
+      return '2+3+4';
+    case 7680:
+      return '1+2+3+4';
+    case 8192:
+      return 'RAGE';
+    default:
+      return '';
+  }
+}
+
+export function parseCharacter(characterId: number): string {
+  switch (characterId) {
+    case 0:
+      return 'PAUL';
+    case 1:
+      return 'LAW';
+    case 2:
+      return 'KING';
+    case 3:
+      return 'YOSHIMITSU';
+    case 4:
+      return 'HWOARANG';
+    case 5:
+      return 'XIAOYU';
+    case 6:
+      return 'JIN';
+    case 7:
+      return 'BRYAN';
+    case 8:
+      return 'HEIHACHI';
+    case 9:
+      return 'KAZUYA';
+    case 10:
+      return 'STEVE';
+    case 11:
+      return 'JACK_7';
+    case 12:
+      return 'ASUKA';
+    case 13:
+      return 'DEVIL_JIN';
+    case 14:
+      return 'FENG';
+    case 15:
+      return 'LILI';
+    case 16:
+      return 'DRAGUNOV';
+    case 17:
+      return 'LEO';
+    case 18:
+      return 'LARS';
+    case 19:
+      return 'ALISA';
+    case 20:
+      return 'CLAUDIO';
+    case 21:
+      return 'KATARINA';
+    case 22:
+      return 'LUCKY_CHLOE';
+    case 23:
+      return 'SHAHEEN';
+    case 24:
+      return 'JOSIE';
+    case 25:
+      return 'GIGAS';
+    case 26:
+      return 'KAZUMI';
+    case 27:
+      return 'DEVIL_KAZUMI';
+    case 28:
+      return 'NINA';
+    case 29:
+      return 'MASTER_RAVEN';
+    case 30:
+      return 'LEE';
+    case 31:
+      return 'BOB';
+    case 32:
+      return 'AKUMA';
+    case 33:
+      return 'KUMA';
+    case 34:
+      return 'PANDA';
+    case 35:
+      return 'EDDY';
+    case 36:
+      return 'ELIZA';
+    case 37:
+      return 'MIGUEL';
+    case 38:
+      return 'TEKKEN_FORCE';
+    case 39:
+      return 'KID_KAZUYA';
+    case 40:
+      return 'JACK_4';
+    case 41:
+      return 'YOUNG_HEIHACHI';
+    case 42:
+      return 'TRAINING_DUMMY';
+    case 43:
+      return 'GEESE';
+    case 44:
+      return 'NOCTIS';
+    case 45:
+      return 'ANNA';
+    case 46:
+      return 'LEI';
+    case 47:
+      return 'MARDUK';
+    case 48:
+      return 'ARMOR_KING';
+    case 49:
+      return 'JULIA';
+    case 50:
+      return 'NEGAN';
+    case 51:
+      return 'ZAFINA';
+    case 52:
+      return 'GANRYU';
+    case 53:
+      return 'LEROY';
+    case 54:
+      return 'FAHKUMRAM';
+    case 55:
+      return 'KUNIMITSU';
+    case 56:
+      return 'LIDIA';
+    case 71:
+      return 'NOT_YET_LOADED';
+    case 255:
+      return 'NO_SELECTION';
+    default:
+      return '';
+  }
+}

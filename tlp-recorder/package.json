@@ -3,29 +3,39 @@
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
-  "type": "module",
-  "exports": "./dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/index.ts"
+    "test": "jest",
+    "start": "ts-node -r tsconfig-paths/register --files ./src/index.ts",
+    "dev": "ts-node-dev -r tsconfig-paths/register --inspect --respawn --rs --transpile-only --files ./src/index.ts"
   },
   "author": "Marcel Herd",
   "license": "GPL-3.0-or-later",
   "devDependencies": {
+    "@types/jest": "^27.5.1",
     "@types/node": "^17.0.31",
+    "@types/npmlog": "^4.1.4",
     "@typescript-eslint/eslint-plugin": "^5.23.0",
     "@typescript-eslint/parser": "^5.23.0",
-    "eslint": "^8.15.0",
+    "eslint": "^7.32.0 || ^8.2.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-jest": "^26.2.2",
     "eslint-plugin-prettier": "^4.0.0",
+    "jest": "^28.1.0",
     "nodemon": "^2.0.16",
     "prettier": "^2.6.2",
+    "ts-jest": "^28.0.2",
     "ts-node": "^10.7.0",
+    "ts-node-dev": "^1.1.8",
+    "tsconfig-paths": "^4.0.0",
     "typescript": "^4.6.4"
   },
   "dependencies": {
     "dotenv": "^16.0.0",
     "memoryjs": "^3.4.0",
+    "npmlog": "^6.0.2",
     "obs-websocket-js": "^5.0.0-beta.1"
   }
 }
