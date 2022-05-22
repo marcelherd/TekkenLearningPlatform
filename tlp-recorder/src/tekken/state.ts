@@ -3,6 +3,7 @@ import memoryjs, { Process } from 'memoryjs';
 import log from '@/helpers/log';
 import dereferencePointerChain from '@/helpers/memory';
 import * as offsets from '@/tekken/offsets';
+import { PlayerOffsets } from '@/tekken/offsets';
 import { parseCharacter, parseAttack, parseDirection } from '@/tekken/parser';
 
 // #region Types
@@ -12,22 +13,30 @@ export interface PlayerInput {
   move: number;
 }
 
-export interface GameScore {
+export enum MatchResult {
+  LOSS = 'Loss',
+  WIN = 'Win',
+  DRAW = 'Draw',
+  UNRESOLVED = 'Unresolved',
+}
+
+export interface MatchScore {
   playerWins: number;
   opponentWins: number;
   roundWinsRequired: number;
-  outcome: boolean;
+  outcome: MatchResult;
 }
 // #endregion
 
-export default class TekkenState {
-  private static instance: TekkenState;
+export default class GameState {
+  private static instance: GameState;
 
   private process: Process;
   private handle: number;
   private baseAddress: number;
 
   private playing: boolean = false;
+  private finalScore: MatchScore | null = null;
 
   private constructor() {
     this.process = memoryjs.openProcess('TekkenGame-Win64-Shipping.exe');
@@ -35,15 +44,13 @@ export default class TekkenState {
     this.baseAddress = this.process.modBaseAddr;
 
     log.debug('Attached to process TekkenGame-Win64-Shipping.exe');
-
-    this.update();
   }
 
-  static getInstance(): TekkenState {
-    if (TekkenState.instance) return TekkenState.instance;
+  static getInstance(): GameState {
+    if (GameState.instance) return GameState.instance;
 
-    const instance = new TekkenState();
-    TekkenState.instance = instance;
+    const instance = new GameState();
+    GameState.instance = instance;
 
     return instance;
   }
@@ -54,26 +61,32 @@ export default class TekkenState {
     const isGameOver = this.fetchIsGameOver(); // Outro has already played and score is stale
 
     if (!isInWarmup && isIngame && !isGameOver && !this.playing) {
-      const opponentSide = this.fetchOpponentSide();
-      const playerCharacter =
-        opponentSide === 1 ? this.fetchP1Character() : this.fetchP2Character();
-      const opponentCharacter =
-        opponentSide === 1 ? this.fetchP2Character() : this.fetchP1Character();
+      const { playerOffsets, opponentOffsets } = this.getPlayerOffsets();
+      const playerCharacter = this.fetchCharacter(playerOffsets);
+      const opponentCharacter = this.fetchCharacter(opponentOffsets);
       const opponentName = this.fetchOpponentName();
 
       log.debug('Game started');
-      log.debug(
-        `You are playing as ${playerCharacter}. Your opponent ${opponentName} is playing ${opponentCharacter}`,
-      );
+      log.debug(`Playing ${playerCharacter} against ${opponentName}'s ${opponentCharacter}`);
       this.playing = true;
     }
 
-    if (this.playing && isGameOver) {
-      const { playerWins, opponentWins, outcome } = this.getScore(); // Stale, needs to be fetched earlier
-      this.playing = false;
+    if (this.playing && !this.finalScore) {
+      const score = this.getScore();
+      if (score.outcome !== MatchResult.UNRESOLVED) {
+        this.finalScore = score;
+      }
+    }
 
-      const result = outcome ? 'win' : 'loss';
-      log.debug(`Game ended in a ${result}. Final score: ${playerWins}-${opponentWins}`);
+    if (this.playing && isGameOver) {
+      // broadcast game ended event
+
+      if (this.finalScore) {
+        const { playerWins, opponentWins, outcome } = this.finalScore;
+        this.playing = false;
+        this.finalScore = null;
+        log.debug(`Game ended in a ${outcome}. Final score: ${playerWins}-${opponentWins}`);
+      }
     }
   }
 
@@ -82,72 +95,89 @@ export default class TekkenState {
     return dereferencePointerChain<T>(this.handle, this.baseAddress, offset, dataType);
   }
 
-  private getScore(): GameScore {
-    const opponentSide = this.fetchOpponentSide();
+  private getScore(): MatchScore {
+    const { playerOffsets, opponentOffsets } = this.getPlayerOffsets();
 
-    const playerWins = opponentSide === 1 ? this.fetchP1RoundWins() : this.fetchP2RoundWins();
-    const opponentWins = opponentSide === 1 ? this.fetchP2RoundWins() : this.fetchP1RoundWins();
+    const playerWins = this.fetchRoundWins(playerOffsets);
+    const opponentWins = this.fetchRoundWins(opponentOffsets);
     const roundWinsRequired = this.fetchRoundWinsRequired();
-    const outcome = playerWins > opponentWins; // TODO: I mean this really cannot be a boolean but whatever
 
-    return {
+    const unresolvedScore: Omit<MatchScore, 'outcome'> = {
       playerWins,
       opponentWins,
       roundWinsRequired,
+    };
+
+    const outcome = GameState.calculateMatchResult(unresolvedScore);
+
+    return {
+      ...unresolvedScore,
       outcome,
+    };
+  }
+
+  private static calculateMatchResult(unresolvedScore: Omit<MatchScore, 'outcome'>): MatchResult {
+    const { playerWins, opponentWins, roundWinsRequired } = unresolvedScore;
+
+    if (playerWins > opponentWins && playerWins === roundWinsRequired) {
+      return MatchResult.WIN;
+    }
+
+    if (playerWins < opponentWins && opponentWins === roundWinsRequired) {
+      return MatchResult.LOSS;
+    }
+
+    if (opponentWins === roundWinsRequired && playerWins === roundWinsRequired) {
+      return MatchResult.DRAW;
+    }
+
+    return MatchResult.UNRESOLVED;
+  }
+
+  private getPlayerOffsets() {
+    const opponentSide = this.fetchOpponentSide();
+    if (opponentSide === 1) {
+      return {
+        playerOffsets: offsets.p1,
+        opponentOffsets: offsets.p2,
+      };
+    }
+
+    return {
+      playerOffsets: offsets.p2,
+      opponentOffsets: offsets.p1,
     };
   }
   // #endregion
 
-  // #region Player 1
-  fetchP1Character(): string {
-    const characterId = this.getValue(offsets.p1CharId);
+  // #region Player
+  fetchCharacter(playerOffsets: PlayerOffsets): string {
+    const characterId = this.getValue(playerOffsets.charId);
     return parseCharacter(characterId);
   }
 
-  fetchP1Input(): PlayerInput {
-    const rawDirectionInput = this.getValue(offsets.p1InputDirection);
+  fetchInput(playerOffsets: PlayerOffsets): PlayerInput {
+    const rawDirectionInput = this.getValue(playerOffsets.directionInput);
     const parsedDirection = parseDirection(rawDirectionInput);
-    const rawAttackInput = this.getValue(offsets.p1InputAttack);
+    const rawAttackInput = this.getValue(playerOffsets.attackInput);
     const parsedAttack = parseAttack(rawAttackInput);
-    const move = this.getValue(offsets.p1MoveId);
+    const move = this.getValue(playerOffsets.moveId);
     return { direction: parsedDirection, attack: parsedAttack, move };
   }
 
-  fetchP1RoundWins(): number {
-    return this.getValue(offsets.p1RoundWins);
-  }
-  // #endregion
-
-  // #region Player 2
-  fetchP2Character(): string {
-    const characterId = this.getValue(offsets.p2CharId);
-    return parseCharacter(characterId);
-  }
-
-  fetchP2Input(): PlayerInput {
-    const rawDirectionInput = this.getValue(offsets.p2InputDirection);
-    const parsedDirection = parseDirection(rawDirectionInput);
-    const rawAttackInput = this.getValue(offsets.p2InputAttack);
-    const parsedAttack = parseAttack(rawAttackInput);
-    const move = this.getValue(offsets.p2MoveId);
-    return { direction: parsedDirection, attack: parsedAttack, move };
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  fetchP2RoundWins(): number {
-    return 0;
+  fetchRoundWins(playerOffsets: PlayerOffsets): number {
+    return this.getValue(playerOffsets.roundWins);
   }
   // #endregion
 
   // #region Non player data
   fetchRoundWinsRequired(): number {
-    return this.getValue(offsets.roundWinsRequired);
+    return this.getValue(offsets.game.roundWinsRequired);
   }
 
   fetchOpponentName(): string | null {
     try {
-      const opponent = this.getValue<string>(offsets.opponentName, memoryjs.STRING);
+      const opponent = this.getValue<string>(offsets.game.opponent.name, memoryjs.STRING);
 
       if (typeof opponent !== 'string') return null;
       if (opponent.length < 2 || opponent.length > 32) return null;
@@ -167,7 +197,7 @@ export default class TekkenState {
    * @memberof TekkenState
    */
   fetchOpponentSide(): number {
-    return this.getValue(offsets.opponentSide);
+    return this.getValue(offsets.game.opponent.side);
   }
 
   /**
@@ -177,7 +207,7 @@ export default class TekkenState {
    * @memberof TekkenState
    */
   fetchIsInWarmup(): boolean {
-    const bWarmup = this.getValue(offsets.bWarmup);
+    const bWarmup = this.getValue(offsets.flags.warmup);
     return bWarmup === 1;
   }
 
@@ -188,7 +218,7 @@ export default class TekkenState {
    * @memberof TekkenState
    */
   fetchIsIngame(): boolean {
-    const bIngame = this.getValue(offsets.bIngame);
+    const bIngame = this.getValue(offsets.flags.ingame);
     return bIngame === 1;
   }
 
@@ -199,7 +229,7 @@ export default class TekkenState {
    * @memberof TekkenState
    */
   fetchIsGameOver(): boolean {
-    const bIsGameOver = this.getValue(offsets.bGameIsOver);
+    const bIsGameOver = this.getValue(offsets.flags.gameIsOver);
     return bIsGameOver !== 0;
   }
   // #endregion

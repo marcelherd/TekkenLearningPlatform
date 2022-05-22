@@ -1,9 +1,8 @@
 import 'dotenv/config';
 
-import log from '@/helpers/log';
-import TekkenState from '@/tekken/state';
+import GameState from '@/tekken/state';
 
-const state: TekkenState = TekkenState.getInstance();
+const state = GameState.getInstance();
 
 async function tick() {
   state.update();
