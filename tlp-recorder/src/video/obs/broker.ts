@@ -1,20 +1,20 @@
 import OBSWebSocket from 'obs-websocket-js';
 
-export default class ObsBroker {
-  private static instance: ObsBroker;
+export default class Broker {
+  private static instance: Broker;
 
-  private obs: any;
+  private obs: OBSWebSocket;
 
   private constructor() {
     this.obs = new OBSWebSocket();
   }
 
-  static async getInstance(): Promise<ObsBroker> {
-    if (ObsBroker.instance) return ObsBroker.instance;
+  static async getInstance(): Promise<Broker> {
+    if (Broker.instance) return Broker.instance;
 
-    const instance = new ObsBroker();
+    const instance = new Broker();
     await instance.connect();
-    ObsBroker.instance = instance;
+    Broker.instance = instance;
 
     return instance;
   }
@@ -35,7 +35,7 @@ export default class ObsBroker {
     await this.obs.call('SetInputSettings', {
       inputName: sourceName,
       inputSettings: {
-        text: text,
+        text,
       },
     });
   }

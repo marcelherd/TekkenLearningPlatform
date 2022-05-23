@@ -16,6 +16,7 @@
     "resolveJsonModule": true,
     "sourceMap": true,
     "paths": {
+      "#/*": ["./credentials/*"],
       "@/*": ["./src/*"]
     },
     "typeRoots": ["./src/types", "./node_modules/@types"]

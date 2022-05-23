@@ -26,6 +26,13 @@ export interface MatchScore {
   roundWinsRequired: number;
   outcome: MatchResult;
 }
+
+export enum Event {
+  MATCH_START = 'MatchStart',
+  MATCH_END = 'MatchEnd',
+  MATCH_UNRESOLVED = 'MatchUnresolved',
+}
+export type EventHandler = (data?: any) => void;
 // #endregion
 
 export default class GameState {
@@ -34,6 +41,12 @@ export default class GameState {
   private process: Process;
   private handle: number;
   private baseAddress: number;
+
+  private listeners: Record<Event, EventHandler[]> = {
+    MatchStart: [],
+    MatchEnd: [],
+    MatchUnresolved: [],
+  };
 
   private playing: boolean = false;
   private finalScore: MatchScore | null = null;
@@ -55,6 +68,18 @@ export default class GameState {
     return instance;
   }
 
+  addEventListener(event: Event, callback: EventHandler) {
+    this.listeners[event].push(callback);
+  }
+
+  broadcast(event: Event, data?: any) {
+    const callbacks = this.listeners[event];
+    for (let i = 0; i < callbacks.length; i++) {
+      const callback = callbacks[i];
+      callback(data);
+    }
+  }
+
   update(): void {
     const isIngame = this.fetchIsIngame();
     const isInWarmup = this.fetchIsInWarmup();
@@ -66,8 +91,7 @@ export default class GameState {
       const opponentCharacter = this.fetchCharacter(opponentOffsets);
       const opponentName = this.fetchOpponentName();
 
-      log.debug('Game started');
-      log.debug(`Playing ${playerCharacter} against ${opponentName}'s ${opponentCharacter}`);
+      this.broadcast(Event.MATCH_START, playerCharacter);
       this.playing = true;
     }
 
@@ -79,13 +103,13 @@ export default class GameState {
     }
 
     if (this.playing && isGameOver) {
-      // broadcast game ended event
-
       if (this.finalScore) {
         const { playerWins, opponentWins, outcome } = this.finalScore;
         this.playing = false;
         this.finalScore = null;
-        log.debug(`Game ended in a ${outcome}. Final score: ${playerWins}-${opponentWins}`);
+        this.broadcast(Event.MATCH_END);
+      } else {
+        this.broadcast(Event.MATCH_UNRESOLVED);
       }
     }
   }
