@@ -22,3 +22,8 @@ export default function getEnvironmentVariable(name: string, defaultValue?: stri
   }
   return value;
 }
+
+export function isFlagSet(name: string, defaultValue?: boolean): boolean {
+  const value = getEnvironmentVariable(name, String(defaultValue));
+  return value === 'true';
+}

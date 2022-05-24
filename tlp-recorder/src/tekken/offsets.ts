@@ -24,7 +24,7 @@ export const p2: PlayerOffsets = {
   attackInput: `0x34DC028 0x1A5C`,
   directionInput: `0x34DC028 0xDDC`,
   roundWins: `0x34CA4F0`,
-  rank: `0x343452C`, // TODO: wrong address, but I can't find it
+  rank: `0x343452C`, // FIXME: Wrong address, but I can't find the correct one
 };
 
 export const game = {

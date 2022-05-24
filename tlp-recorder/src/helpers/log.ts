@@ -4,8 +4,15 @@ import getEnvironmentVariable from '@/helpers/environment';
 
 log.level = getEnvironmentVariable('LOG_LEVEL', 'info');
 
+// FIXME: For some reason any logging with args is output twice.
+// The first time it includes args and the second time it does not.
+
 export default {
-  ...log,
+  // ...log,
+  silly: (message: string, ...args: any[]) => {
+    if (args.length > 0) log.silly('', message, args);
+    log.silly('', message);
+  },
   debug: (message: string, ...args: any[]) => {
     if (args.length > 0) log.verbose('', message, args);
     log.verbose('', message);

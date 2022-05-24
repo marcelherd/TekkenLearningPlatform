@@ -1,13 +1,16 @@
 import memoryjs, { Process } from 'memoryjs';
+import { TypedEmitter } from 'tiny-typed-emitter';
 
 import log from '@/helpers/log';
 import dereferencePointerChain from '@/helpers/memory';
 import * as offsets from '@/tekken/offsets';
 import { PlayerOffsets } from '@/tekken/offsets';
-import { parseCharacter, parseAttack, parseDirection } from '@/tekken/parser';
+import { parseCharacter, parseAttack, parseDirection, parseRank } from '@/tekken/parser';
+
+// TODO: Move types and clean this file up in general
 
 // #region Types
-export interface PlayerInput {
+export interface InputData {
   direction: string;
   attack: string;
   move: number;
@@ -27,31 +30,61 @@ export interface MatchScore {
   outcome: MatchResult;
 }
 
-export enum Event {
+export interface PlayerData {
+  character: string;
+  rank: string;
+}
+
+export interface OpponentData {
+  character: string;
+  name: string;
+  rank: string;
+}
+
+export interface MatchStartEventData {
+  player: PlayerData;
+  opponent: OpponentData;
+}
+
+export interface MatchEndEventData {
+  score: MatchScore;
+}
+
+export interface MatchUnresolvedEventData {}
+
+export interface TickEventData {
+  playerInput: InputData;
+  opponentInput: InputData;
+}
+
+export enum TekkenEvent {
   MATCH_START = 'MatchStart',
   MATCH_END = 'MatchEnd',
   MATCH_UNRESOLVED = 'MatchUnresolved',
+  TICK = 'Tick',
 }
-export type EventHandler = (data?: any) => void;
+
+export interface TekkenEvents {
+  MatchStart: (data: MatchStartEventData) => void;
+  MatchEnd: (data: MatchEndEventData) => void;
+  MatchUnresolved: (data: MatchUnresolvedEventData) => void;
+  Tick: (data: TickEventData) => void;
+}
 // #endregion
 
-export default class GameState {
+export default class GameState extends TypedEmitter<TekkenEvents> {
   private static instance: GameState;
 
   private process: Process;
   private handle: number;
   private baseAddress: number;
 
-  private listeners: Record<Event, EventHandler[]> = {
-    MatchStart: [],
-    MatchEnd: [],
-    MatchUnresolved: [],
-  };
-
   private playing: boolean = false;
   private finalScore: MatchScore | null = null;
 
   private constructor() {
+    super();
+
     this.process = memoryjs.openProcess('TekkenGame-Win64-Shipping.exe');
     this.handle = this.process.handle;
     this.baseAddress = this.process.modBaseAddr;
@@ -68,34 +101,45 @@ export default class GameState {
     return instance;
   }
 
-  addEventListener(event: Event, callback: EventHandler) {
-    this.listeners[event].push(callback);
-  }
-
-  broadcast(event: Event, data?: any) {
-    const callbacks = this.listeners[event];
-    for (let i = 0; i < callbacks.length; i++) {
-      const callback = callbacks[i];
-      callback(data);
-    }
-  }
-
   update(): void {
     const isIngame = this.fetchIsIngame();
     const isInWarmup = this.fetchIsInWarmup();
-    const isGameOver = this.fetchIsGameOver(); // Outro has already played and score is stale
+    const isGameOver = this.fetchIsGameOver(); // Outro has already played
 
     if (!isInWarmup && isIngame && !isGameOver && !this.playing) {
       const { playerOffsets, opponentOffsets } = this.getPlayerOffsets();
       const playerCharacter = this.fetchCharacter(playerOffsets);
+      const playerRank = this.fetchRank(playerOffsets);
       const opponentCharacter = this.fetchCharacter(opponentOffsets);
       const opponentName = this.fetchOpponentName();
 
-      this.broadcast(Event.MATCH_START, playerCharacter);
+      // FIXME: Sometimes this is fired twice
+      this.emit(TekkenEvent.MATCH_START, {
+        player: {
+          character: playerCharacter,
+          rank: playerRank,
+        },
+        opponent: {
+          character: opponentCharacter,
+          name: opponentName ?? 'Unknown',
+          rank: 'Unknown', // TODO
+        },
+      });
+
       this.playing = true;
     }
 
     if (this.playing && !this.finalScore) {
+      const { playerOffsets, opponentOffsets } = this.getPlayerOffsets();
+
+      const playerInput = this.fetchInput(playerOffsets);
+      const opponentInput = this.fetchInput(opponentOffsets);
+
+      this.emit(TekkenEvent.TICK, {
+        playerInput,
+        opponentInput,
+      });
+
       const score = this.getScore();
       if (score.outcome !== MatchResult.UNRESOLVED) {
         this.finalScore = score;
@@ -104,12 +148,16 @@ export default class GameState {
 
     if (this.playing && isGameOver) {
       if (this.finalScore) {
-        const { playerWins, opponentWins, outcome } = this.finalScore;
+        // FIXME: Sometimes this is fired twice
+        this.emit(TekkenEvent.MATCH_END, {
+          score: this.finalScore,
+        });
+
         this.playing = false;
         this.finalScore = null;
-        this.broadcast(Event.MATCH_END);
       } else {
-        this.broadcast(Event.MATCH_UNRESOLVED);
+        // FIXME: Doesn't work at all
+        this.emit(TekkenEvent.MATCH_UNRESOLVED, {});
       }
     }
   }
@@ -180,7 +228,12 @@ export default class GameState {
     return parseCharacter(characterId);
   }
 
-  fetchInput(playerOffsets: PlayerOffsets): PlayerInput {
+  fetchRank(playerOffsets: PlayerOffsets): string {
+    const rank = this.getValue(playerOffsets.rank);
+    return parseRank(rank);
+  }
+
+  fetchInput(playerOffsets: PlayerOffsets): InputData {
     const rawDirectionInput = this.getValue(playerOffsets.directionInput);
     const parsedDirection = parseDirection(rawDirectionInput);
     const rawAttackInput = this.getValue(playerOffsets.attackInput);

@@ -182,3 +182,104 @@ export function parseCharacter(characterId: number): string {
       return '';
   }
 }
+
+export function parseRank(rank: number): string {
+  switch (rank) {
+    case 0:
+      return 'Beginner';
+    case 1:
+      return '9th Kyu';
+    case 2:
+      return '8th Kyu';
+    case 3:
+      return '7th Kyu';
+    case 4:
+      return '6th Kyu';
+    case 5:
+      return '5th Kyu';
+    case 6:
+      return '4th Kyu';
+    case 7:
+      return '3rd Kyu';
+    case 8:
+      return '2nd Kyu';
+    case 9:
+      return '1st Kyu';
+    case 10:
+      return '1st Dan';
+    case 11:
+      return '2nd Dan';
+    case 12:
+      return '3rd Dan';
+    case 13:
+      return 'Initiate';
+    case 14:
+      return 'Mentor';
+    case 15:
+      return 'Expert';
+    case 16:
+      return 'Grandmaster';
+    case 17:
+      return 'Brawler';
+    case 18:
+      return 'Marauder';
+    case 19:
+      return 'Fighter';
+    case 20:
+      return 'Vanguard';
+    case 21:
+      return 'Warrior';
+    case 22:
+      return 'Vindicator';
+    case 23:
+      return 'Juggernaut';
+    case 24:
+      return 'Usurper';
+    case 25:
+      return 'Vanquisher';
+    case 26:
+      return 'Destroyer';
+    case 27:
+      return 'Savior';
+    case 28:
+      return 'Overlord';
+    case 29:
+      return 'Genbu';
+    case 30:
+      return 'Byakko';
+    case 31:
+      return 'Seiryu';
+    case 32:
+      return 'Suzaku';
+    case 33:
+      return 'Mighty Ruler';
+    case 34:
+      return 'Revered Ruler';
+    case 35:
+      return 'Divine Ruler';
+    case 36:
+      return 'Eternal Ruler';
+    case 37:
+      return 'Fujin';
+    case 38:
+      return 'Raijin';
+    case 39:
+      return 'Yaksa';
+    case 40:
+      return 'Ryujin';
+    case 41:
+      return 'Emperor';
+    case 42:
+      return 'Tekken King';
+    case 43:
+      return 'Tekken God';
+    case 44:
+      return 'True Tekken God';
+    case 45:
+      return 'Tekken God Prime';
+    case 46:
+      return 'Tekken God Omega';
+    default:
+      return '';
+  }
+}

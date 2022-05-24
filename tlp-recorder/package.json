@@ -41,6 +41,7 @@
     "memoryjs": "^3.4.0",
     "npmlog": "^6.0.2",
     "obs-websocket-js": "^5.0.0-beta.1",
-    "open": "^8.4.0"
+    "open": "^8.4.0",
+    "tiny-typed-emitter": "^2.1.0"
   }
 }

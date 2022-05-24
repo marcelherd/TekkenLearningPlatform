@@ -3,7 +3,7 @@ import path from 'path';
 
 import getEnvironmentVariable from '@/helpers/environment';
 
-const recordingFolderPath = getEnvironmentVariable('RECORDING_PATH', 'E:/Recording');
+const recordingFolderPath = getEnvironmentVariable('RECORDING_PATH', 'E:/Recording/TLP');
 
 export default function getLatestVideoPath() {
   const mostRecentFiles = fs
@@ -17,4 +17,15 @@ export default function getLatestVideoPath() {
 
   const [fileName] = mostRecentFiles;
   return path.join(recordingFolderPath, fileName);
+}
+
+export function cleanupRecordingFolder() {
+  // TODO: Implement me
+}
+
+export function removeLatestVideo() {
+  const videoPath = getLatestVideoPath();
+  if (videoPath) {
+    fs.unlinkSync(videoPath);
+  }
 }

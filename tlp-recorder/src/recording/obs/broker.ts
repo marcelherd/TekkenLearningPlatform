@@ -1,5 +1,8 @@
 import OBSWebSocket from 'obs-websocket-js';
 
+import { TickEventData } from '@/tekken/state';
+import getNotation from '@/tekken/notation';
+
 export default class Broker {
   private static instance: Broker;
 
@@ -31,11 +34,36 @@ export default class Broker {
     await this.obs.call('StopRecord');
   }
 
+  async pauseRecording(): Promise<void> {
+    await this.obs.call('PauseRecord');
+  }
+
+  async resumeRecording(): Promise<void> {
+    await this.obs.call('ResumeRecord');
+  }
+
+  async getRecordingStatus(): Promise<{
+    outputActive: boolean;
+    ouputPaused: boolean;
+    outputTimecode: string;
+    outputDuration: number;
+    outputBytes: number;
+  }> {
+    return this.obs.call('GetRecordStatus');
+  }
+
+  async updateMetadataFromTick(data: TickEventData) {
+    const { playerInput, opponentInput } = data;
+
+    await this.updateText('p1move', getNotation(playerInput));
+    await this.updateText('p2move', getNotation(opponentInput));
+  }
+
   async updateText(sourceName: string, text: string): Promise<void> {
     await this.obs.call('SetInputSettings', {
       inputName: sourceName,
       inputSettings: {
-        text: text,
+        text,
       },
     });
   }
