@@ -183,6 +183,67 @@ export function parseCharacter(characterId: number): string {
   }
 }
 
+export function parseStage(stage: number): string {
+  switch (stage) {
+    case 0:
+      return 'Mishima Dojo';
+    case 1:
+      return 'Forgotten Realm';
+    case 2:
+    case 53: // Jungle Outpost 2
+      return 'Jungle Outpost';
+    case 3:
+      return 'Arctic Snowfall';
+    case 4:
+    case 54: // Twilight Conflict 2
+      return 'Twilight Conflict';
+    case 5:
+      return "Dragon's Nest";
+    case 6:
+      return 'Souq';
+    case 7:
+      return "Devil's Pit";
+    case 8:
+      return 'Mishima Building';
+    case 9:
+      return 'Abandoned Temple';
+    case 30:
+      return 'Duomo Di Sirio';
+    case 31:
+      return 'Arena';
+    case 32:
+    case 33: // G Corp. Helipad (Night)
+      return 'G Corp. Helipad';
+    case 35:
+      return 'Brimstone & Fire';
+    case 36:
+      return 'Precipice of Fate';
+    case 37:
+      return 'Violet Systems';
+    case 39:
+      return 'Kinder Gym';
+    case 40:
+    case 55: // Infinite Azure 2
+      return 'Infinite Azure';
+    case 41:
+      return 'Geometric Plane';
+    case 51:
+      return 'Howard Estate';
+    case 52:
+      return 'Hammerhead';
+    case 56:
+      return 'Last Day on Earth';
+    case 57:
+      return 'Cave of Enlightenment';
+    case 58:
+      return 'Vermilion Gates';
+    case 59:
+      return 'Island Paradise';
+    default:
+      return 'Unknown';
+  }
+}
+
 export function parseRank(rank: number): string {
   switch (rank) {
     case 0:
@@ -280,6 +341,6 @@ export function parseRank(rank: number): string {
     case 46:
       return 'Tekken God Omega';
     default:
-      return '';
+      return 'Unknown';
   }
 }

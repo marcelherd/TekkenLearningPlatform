@@ -1,4 +1,4 @@
-import { InputData } from '@/tekken/state';
+import { InputData } from '@/types/types';
 
 export default function getNotation(input: InputData) {
   const { direction, attack } = input;

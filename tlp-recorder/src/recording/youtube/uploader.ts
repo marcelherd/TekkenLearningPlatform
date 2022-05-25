@@ -3,25 +3,17 @@ import fs from 'fs';
 import { google } from 'googleapis';
 import { OAuth2Client } from 'googleapis/node_modules/google-auth-library';
 
+import db from '@/database';
 import log from '@/helpers/log';
-import getEnvironmentVariable, { isFlagSet } from '@/helpers/environment';
-import getLatestVideoPath from '@/recording/util';
-
-export interface VideoOptions {
-  title: string;
-  description?: string;
-  tags?: string[];
-  categoryId?: string;
-  privacyStatus?: 'public' | 'unlisted' | 'private';
-}
-
-const CLEANUP_ENABLED = isFlagSet('CLEANUP_ENABLED', true);
-const CLEANUP_GRACE_PERIOD = Number(getEnvironmentVariable('CLEANUP_GRACE_PERIOD', '5000'));
+import { CLEANUP_ENABLED } from '@/config';
+import getLatestVideoPath, { scheduleCleanup } from '@/recording/util';
+import { VideoOptions } from '@/types/types';
 
 async function uploadVideo(
   client: OAuth2Client,
   path: string,
   options: VideoOptions,
+  matchIds: number[],
 ): Promise<void> {
   try {
     const service = google.youtube({
@@ -55,15 +47,23 @@ async function uploadVideo(
         }
 
         const videoUrl = `https://www.youtube.com/watch?v=${res?.data.id}`;
-        log.info('Recording uploaded', { videoUrl });
+        log.debug('Recording uploaded', { videoUrl });
+
+        console.log('matchIds', matchIds);
+        if (matchIds && matchIds.length > 0) {
+          db.match.updateMany({
+            where: {
+              id: { in: matchIds },
+            },
+            data: {
+              recordingUrl: videoUrl,
+            },
+          });
+          log.debug('Adding YouTube URL to matches', { matchIds });
+        }
 
         if (CLEANUP_ENABLED) {
-          // Generous grace period as I noticed there were some issues with processing
-          // which may or may not have been related.
-          setTimeout(() => {
-            log.info('Deleting local recording', { path });
-            fs.unlinkSync(path);
-          }, CLEANUP_GRACE_PERIOD);
+          scheduleCleanup(path);
         }
       },
     );
@@ -75,6 +75,7 @@ async function uploadVideo(
 export default async function uploadLatestVideo(
   client: OAuth2Client,
   options: VideoOptions,
+  matchIds: number[],
 ): Promise<void> {
   const path = getLatestVideoPath();
 
@@ -84,5 +85,5 @@ export default async function uploadLatestVideo(
     throw new Error('Did not find any video file to upload');
   }
 
-  return uploadVideo(client, path, options);
+  return uploadVideo(client, path, options, matchIds);
 }

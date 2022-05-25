@@ -1,13 +1,4 @@
-// #region Types
-export interface PlayerOffsets {
-  charId: string;
-  moveId: string;
-  attackInput: string;
-  directionInput: string;
-  roundWins: string;
-  rank: string;
-}
-// #endregion
+import { PlayerOffsets } from '@/types/types';
 
 export const p1: PlayerOffsets = {
   charId: `0x34DC030 0xDC`,
@@ -28,6 +19,7 @@ export const p2: PlayerOffsets = {
 };
 
 export const game = {
+  stage: `0x34DBF50`, // or 0x34E6200
   roundWinsRequired: `0x34DBF30`,
   opponent: {
     name: `0x34D24A0 0x0 0x8 0x11C`,

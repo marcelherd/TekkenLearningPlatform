@@ -4,73 +4,22 @@ import { TypedEmitter } from 'tiny-typed-emitter';
 import log from '@/helpers/log';
 import dereferencePointerChain from '@/helpers/memory';
 import * as offsets from '@/tekken/offsets';
-import { PlayerOffsets } from '@/tekken/offsets';
-import { parseCharacter, parseAttack, parseDirection, parseRank } from '@/tekken/parser';
-
-// TODO: Move types and clean this file up in general
-
-// #region Types
-export interface InputData {
-  direction: string;
-  attack: string;
-  move: number;
-}
-
-export enum MatchResult {
-  LOSS = 'Loss',
-  WIN = 'Win',
-  DRAW = 'Draw',
-  UNRESOLVED = 'Unresolved',
-}
-
-export interface MatchScore {
-  playerWins: number;
-  opponentWins: number;
-  roundWinsRequired: number;
-  outcome: MatchResult;
-}
-
-export interface PlayerData {
-  character: string;
-  rank: string;
-}
-
-export interface OpponentData {
-  character: string;
-  name: string;
-  rank: string;
-}
-
-export interface MatchStartEventData {
-  player: PlayerData;
-  opponent: OpponentData;
-}
-
-export interface MatchEndEventData {
-  score: MatchScore;
-}
-
-export interface MatchUnresolvedEventData {}
-
-export interface TickEventData {
-  playerInput: InputData;
-  opponentInput: InputData;
-}
-
-export enum TekkenEvent {
-  MATCH_START = 'MatchStart',
-  MATCH_END = 'MatchEnd',
-  MATCH_UNRESOLVED = 'MatchUnresolved',
-  TICK = 'Tick',
-}
-
-export interface TekkenEvents {
-  MatchStart: (data: MatchStartEventData) => void;
-  MatchEnd: (data: MatchEndEventData) => void;
-  MatchUnresolved: (data: MatchUnresolvedEventData) => void;
-  Tick: (data: TickEventData) => void;
-}
-// #endregion
+import {
+  parseCharacter,
+  parseAttack,
+  parseDirection,
+  parseRank,
+  parseStage,
+} from '@/tekken/parser';
+import {
+  InputData,
+  MatchData,
+  MatchResult,
+  MatchScore,
+  PlayerOffsets,
+  TekkenEvent,
+  TekkenEvents,
+} from '@/types/types';
 
 export default class GameState extends TypedEmitter<TekkenEvents> {
   private static instance: GameState;
@@ -81,6 +30,7 @@ export default class GameState extends TypedEmitter<TekkenEvents> {
 
   private playing: boolean = false;
   private finalScore: MatchScore | null = null;
+  private matchData: MatchData | null = null;
 
   private constructor() {
     super();
@@ -112,18 +62,26 @@ export default class GameState extends TypedEmitter<TekkenEvents> {
       const playerRank = this.fetchRank(playerOffsets);
       const opponentCharacter = this.fetchCharacter(opponentOffsets);
       const opponentName = this.fetchOpponentName();
+      const opponentRank = 'Unknown'; // TODO: Add this
+      const stage = this.fetchStage(); // TODO: Add this
 
+      if (this.matchData === null) {
+        this.matchData = {
+          player: {
+            character: playerCharacter,
+            rank: playerRank,
+          },
+          opponent: {
+            character: opponentCharacter,
+            name: opponentName ?? 'Unknown',
+            rank: opponentRank,
+          },
+          stage,
+        };
+      }
       // FIXME: Sometimes this is fired twice
       this.emit(TekkenEvent.MATCH_START, {
-        player: {
-          character: playerCharacter,
-          rank: playerRank,
-        },
-        opponent: {
-          character: opponentCharacter,
-          name: opponentName ?? 'Unknown',
-          rank: 'Unknown', // TODO
-        },
+        match: this.matchData,
       });
 
       this.playing = true;
@@ -147,14 +105,17 @@ export default class GameState extends TypedEmitter<TekkenEvents> {
     }
 
     if (this.playing && isGameOver) {
-      if (this.finalScore) {
+      // TODO: Maybe matchData should be handled differently here?
+      if (this.finalScore && this.matchData) {
         // FIXME: Sometimes this is fired twice
         this.emit(TekkenEvent.MATCH_END, {
           score: this.finalScore,
+          match: this.matchData,
         });
 
         this.playing = false;
         this.finalScore = null;
+        this.matchData = null;
       } else {
         // FIXME: Doesn't work at all
         this.emit(TekkenEvent.MATCH_UNRESOLVED, {});
@@ -250,6 +211,10 @@ export default class GameState extends TypedEmitter<TekkenEvents> {
   // #region Non player data
   fetchRoundWinsRequired(): number {
     return this.getValue(offsets.game.roundWinsRequired);
+  }
+
+  fetchStage(): string {
+    return parseStage(this.getValue(offsets.game.stage));
   }
 
   fetchOpponentName(): string | null {

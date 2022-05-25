@@ -1,4 +1,5 @@
 /credentials
+/prisma/database.db*
 
 # Logs
 logs

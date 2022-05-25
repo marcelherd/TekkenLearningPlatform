@@ -1,0 +1,53 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./database.db"
+}
+
+model Match {
+  id                Int      @id @default(autoincrement())
+  playerCharacter   String
+  playerRank        String
+  opponent          String
+  opponentCharacter String
+  opponentRank      String
+  stage             String
+  playerRoundWins   Int
+  opponentRoundWins Int
+  roundWinsRequired Int
+  recorded          Boolean  @default(false)
+  recordingUrl      String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+// model Post {
+//   id        Int      @id @default(autoincrement())
+//   title     String   @db.VarChar(255)
+//   createdAt DateTime @default(now()) @db.Timestamp(6)
+//   content   String?
+//   published Boolean  @default(false)
+//   authorId  Int
+//   User      User     @relation(fields: [authorId], references: [id])
+// }
+
+// model Profile {
+//   id     Int     @id @default(autoincrement())
+//   bio    String?
+//   userId Int     @unique
+//   User   User    @relation(fields: [userId], references: [id])
+// }
+
+// model User {
+//   id      Int      @id @default(autoincrement())
+//   name    String?  @db.VarChar(255)
+//   email   String   @unique @db.VarChar(255)
+//   Post    Post[]
+//   Profile Profile?
+// }
