@@ -34,7 +34,7 @@ const Settings: NextPage = () => {
         <title>Tekken Learning Platform</title>
       </Head>
 
-      <Text>Settings</Text>
+      <Text mb={'1em'}>Settings</Text>
     </AppShell>
   );
 };

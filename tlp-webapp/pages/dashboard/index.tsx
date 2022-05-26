@@ -34,7 +34,9 @@ const Dashboard: NextPage = () => {
         <title>Tekken Learning Platform</title>
       </Head>
 
-      <Text>Dashboard</Text>
+      <Title order={2} mb={12}>
+        Dashboard
+      </Title>
     </AppShell>
   );
 };

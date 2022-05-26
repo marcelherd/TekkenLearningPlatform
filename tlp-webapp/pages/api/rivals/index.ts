@@ -9,14 +9,12 @@ export interface Rival {
   lastPlayed: Date;
 }
 
-export interface RivalsData {
-  rivals: Rival[];
-}
-
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<RivalsData>
+  res: NextApiResponse<Rival[]>
 ) {
+  const limit = Number(req.query.limit);
+
   const mostPlayed = await db.match.groupBy({
     by: ['opponent'],
     _count: {
@@ -27,7 +25,7 @@ export default async function handler(
         id: 'desc',
       },
     },
-    take: 10,
+    take: isNaN(limit) ? 10 : limit,
   });
 
   const rivals = await Promise.all(
@@ -64,5 +62,5 @@ export default async function handler(
     })
   );
 
-  res.status(200).json({ rivals });
+  res.status(200).json(rivals);
 }

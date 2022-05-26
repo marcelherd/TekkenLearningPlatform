@@ -7,6 +7,10 @@ import {
 } from '@mantine/core';
 import { useState } from 'react';
 import { setCookies } from 'cookies-next';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
+
+const queryClient = new QueryClient();
 
 type MyProps = AppProps & { colorScheme: ColorScheme };
 
@@ -26,27 +30,30 @@ function MyApp(props: MyProps) {
   };
 
   return (
-    <ColorSchemeProvider
-      colorScheme={colorScheme}
-      toggleColorScheme={toggleColorScheme}
-    >
-      <MantineProvider
-        withGlobalStyles
-        withNormalizeCSS
-        theme={{
-          colorScheme: 'light',
-          breakpoints: {
-            xs: 500,
-            sm: 800,
-            md: 1000,
-            lg: 1200,
-            xl: 1400,
-          },
-        }}
+    <QueryClientProvider client={queryClient}>
+      <ColorSchemeProvider
+        colorScheme={colorScheme}
+        toggleColorScheme={toggleColorScheme}
       >
-        <Component {...pageProps} />
-      </MantineProvider>
-    </ColorSchemeProvider>
+        <MantineProvider
+          withGlobalStyles
+          withNormalizeCSS
+          theme={{
+            colorScheme: 'light',
+            breakpoints: {
+              xs: 500,
+              sm: 800,
+              md: 1000,
+              lg: 1200,
+              xl: 1400,
+            },
+          }}
+        >
+          <Component {...pageProps} />
+        </MantineProvider>
+      </ColorSchemeProvider>
+      <ReactQueryDevtools />
+    </QueryClientProvider>
   );
 }
 

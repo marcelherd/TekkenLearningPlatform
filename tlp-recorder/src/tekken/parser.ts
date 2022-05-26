@@ -61,125 +61,125 @@ export function parseAttack(attack: number): string {
 export function parseCharacter(characterId: number): string {
   switch (characterId) {
     case 0:
-      return 'PAUL';
+      return 'Paul';
     case 1:
-      return 'LAW';
+      return 'Law';
     case 2:
-      return 'KING';
+      return 'King';
     case 3:
-      return 'YOSHIMITSU';
+      return 'Yoshimitsu';
     case 4:
-      return 'HWOARANG';
+      return 'Hwoarang';
     case 5:
-      return 'XIAOYU';
+      return 'Xiaoyu';
     case 6:
-      return 'JIN';
+      return 'Jin';
     case 7:
-      return 'BRYAN';
+      return 'Bryan';
     case 8:
-      return 'HEIHACHI';
+      return 'Heihachi';
     case 9:
-      return 'KAZUYA';
+      return 'Kazuya';
     case 10:
-      return 'STEVE';
+      return 'Steve';
     case 11:
-      return 'JACK_7';
+      return 'Jack 7';
     case 12:
-      return 'ASUKA';
+      return 'Asuka';
     case 13:
-      return 'DEVIL_JIN';
+      return 'Devil Jin';
     case 14:
-      return 'FENG';
+      return 'Feng';
     case 15:
-      return 'LILI';
+      return 'Lili';
     case 16:
-      return 'DRAGUNOV';
+      return 'Dragunov';
     case 17:
-      return 'LEO';
+      return 'Leo';
     case 18:
-      return 'LARS';
+      return 'Lars';
     case 19:
-      return 'ALISA';
+      return 'Alisa';
     case 20:
-      return 'CLAUDIO';
+      return 'Claudio';
     case 21:
-      return 'KATARINA';
+      return 'Katarina';
     case 22:
-      return 'LUCKY_CHLOE';
+      return 'Lucky Chloe';
     case 23:
-      return 'SHAHEEN';
+      return 'Shaheen';
     case 24:
-      return 'JOSIE';
+      return 'Josie';
     case 25:
-      return 'GIGAS';
+      return 'Gigas';
     case 26:
-      return 'KAZUMI';
+      return 'Kazumi';
     case 27:
-      return 'DEVIL_KAZUMI';
+      return 'Devil Kazumi';
     case 28:
-      return 'NINA';
+      return 'Nina';
     case 29:
-      return 'MASTER_RAVEN';
+      return 'Master Raven';
     case 30:
-      return 'LEE';
+      return 'Lee';
     case 31:
-      return 'BOB';
+      return 'Bob';
     case 32:
-      return 'AKUMA';
+      return 'Akuma';
     case 33:
-      return 'KUMA';
+      return 'Kuma';
     case 34:
-      return 'PANDA';
+      return 'Panda';
     case 35:
-      return 'EDDY';
+      return 'Eddy';
     case 36:
-      return 'ELIZA';
+      return 'Eliza';
     case 37:
-      return 'MIGUEL';
+      return 'Miguel';
     case 38:
-      return 'TEKKEN_FORCE';
+      return 'Tekken Force';
     case 39:
-      return 'KID_KAZUYA';
+      return 'Kid Kazuya';
     case 40:
-      return 'JACK_4';
+      return 'Jack 4';
     case 41:
-      return 'YOUNG_HEIHACHI';
+      return 'Young Heihachi';
     case 42:
-      return 'TRAINING_DUMMY';
+      return 'Training Dummy';
     case 43:
-      return 'GEESE';
+      return 'Geese';
     case 44:
-      return 'NOCTIS';
+      return 'Noctis';
     case 45:
-      return 'ANNA';
+      return 'Anna';
     case 46:
-      return 'LEI';
+      return 'Lei';
     case 47:
-      return 'MARDUK';
+      return 'Marduk';
     case 48:
-      return 'ARMOR_KING';
+      return 'Armor King';
     case 49:
-      return 'JULIA';
+      return 'Julia';
     case 50:
-      return 'NEGAN';
+      return 'Negan';
     case 51:
-      return 'ZAFINA';
+      return 'Zafina';
     case 52:
-      return 'GANRYU';
+      return 'Ganryu';
     case 53:
-      return 'LEROY';
+      return 'Leroy';
     case 54:
-      return 'FAHKUMRAM';
+      return 'Fahkumram';
     case 55:
-      return 'KUNIMITSU';
+      return 'Kunimitsu';
     case 56:
-      return 'LIDIA';
+      return 'Lidia';
     case 71:
       return 'NOT_YET_LOADED';
     case 255:
       return 'NO_SELECTION';
     default:
-      return '';
+      return 'Unknown';
   }
 }
 

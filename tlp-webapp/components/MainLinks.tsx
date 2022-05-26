@@ -7,6 +7,7 @@ interface MainLinkProps {
   icon: React.ReactNode;
   color: string;
   label: string;
+  path: string;
 }
 
 function MainLink({ icon, color, label, path }: MainLinkProps) {
