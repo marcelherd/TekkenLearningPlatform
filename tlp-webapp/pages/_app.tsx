@@ -1,25 +1,52 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
-import { MantineProvider } from '@mantine/core';
+import {
+  ColorScheme,
+  ColorSchemeProvider,
+  MantineProvider,
+} from '@mantine/core';
+import { useState } from 'react';
+import { setCookies } from 'cookies-next';
 
-function MyApp({ Component, pageProps }: AppProps) {
+type MyProps = AppProps & { colorScheme: ColorScheme };
+
+function MyApp(props: MyProps) {
+  const { Component, pageProps } = props;
+  const [colorScheme, setColorScheme] = useState<ColorScheme>(
+    props.colorScheme
+  );
+
+  const toggleColorScheme = (value?: ColorScheme) => {
+    const nextColorScheme =
+      value || (colorScheme === 'dark' ? 'light' : 'dark');
+    setColorScheme(nextColorScheme);
+    setCookies('mantine-color-scheme', nextColorScheme, {
+      maxAge: 60 * 60 * 24 * 30,
+    });
+  };
+
   return (
-    <MantineProvider
-      withGlobalStyles
-      withNormalizeCSS
-      theme={{
-        colorScheme: 'light',
-        breakpoints: {
-          xs: 500,
-          sm: 800,
-          md: 1000,
-          lg: 1200,
-          xl: 1400,
-        },
-      }}
+    <ColorSchemeProvider
+      colorScheme={colorScheme}
+      toggleColorScheme={toggleColorScheme}
     >
-      <Component {...pageProps} />
-    </MantineProvider>
+      <MantineProvider
+        withGlobalStyles
+        withNormalizeCSS
+        theme={{
+          colorScheme: 'light',
+          breakpoints: {
+            xs: 500,
+            sm: 800,
+            md: 1000,
+            lg: 1200,
+            xl: 1400,
+          },
+        }}
+      >
+        <Component {...pageProps} />
+      </MantineProvider>
+    </ColorSchemeProvider>
   );
 }
 

@@ -1,11 +1,11 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { AppShell, Navbar, Header } from '@mantine/core';
+import { AppShell, Navbar, Header, Title, Text } from '@mantine/core';
 
 import Brand from '@/components/Brand';
 import MainLinks from '@/components/MainLinks';
 
-const Home: NextPage = () => {
+const Dashboard: NextPage = () => {
   return (
     <AppShell
       padding="md"
@@ -33,17 +33,10 @@ const Home: NextPage = () => {
       <Head>
         <title>Tekken Learning Platform</title>
       </Head>
+
+      <Text>Dashboard</Text>
     </AppShell>
   );
 };
 
-export function getServerSideProps() {
-  return {
-    redirect: {
-      destination: '/dashboard',
-      permanent: false,
-    },
-  };
-}
-
-export default Home;
+export default Dashboard;
