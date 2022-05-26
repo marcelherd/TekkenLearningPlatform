@@ -22,7 +22,6 @@ import { formatRelative } from 'date-fns';
 import Outcome from '@/components/Outcome';
 
 async function fetchMatchDetail(id: string) {
-  console.log('id', id);
   const response = await axios.get(`/api/matches/${id}`);
   return response.data;
 }
@@ -103,6 +102,17 @@ const HistoryDetail: NextPage = () => {
         <Navbar width={{ base: 250 }} p="xs">
           <Navbar.Section grow mt="md">
             <MainLinks />
+          </Navbar.Section>
+          <Navbar.Section mt="md">
+            <Text align="center">
+              Made by{' '}
+              <Anchor
+                target="_blank"
+                href="https://steamcommunity.com/id/shishigami/"
+              >
+                Sταrs
+              </Anchor>
+            </Text>
           </Navbar.Section>
         </Navbar>
       }

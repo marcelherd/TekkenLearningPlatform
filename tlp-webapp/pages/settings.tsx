@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { AppShell, Navbar, Header, Title, Text } from '@mantine/core';
+import { AppShell, Navbar, Header, Title, Text, Anchor } from '@mantine/core';
 
 import Brand from '@/components/Brand';
 import MainLinks from '@/components/MainLinks';
@@ -13,6 +13,17 @@ const Settings: NextPage = () => {
         <Navbar width={{ base: 250 }} p="xs">
           <Navbar.Section grow mt="md">
             <MainLinks />
+          </Navbar.Section>
+          <Navbar.Section mt="md">
+            <Text align="center">
+              Made by{' '}
+              <Anchor
+                target="_blank"
+                href="https://steamcommunity.com/id/shishigami/"
+              >
+                Sταrs
+              </Anchor>
+            </Text>
           </Navbar.Section>
         </Navbar>
       }
@@ -34,7 +45,9 @@ const Settings: NextPage = () => {
         <title>Tekken Learning Platform</title>
       </Head>
 
-      <Text mb={'1em'}>Settings</Text>
+      <Title order={2} mb={12}>
+        Settings
+      </Title>
     </AppShell>
   );
 };

@@ -28,7 +28,7 @@ function MainLink({ icon, color, label, path }: MainLinkProps) {
               ? theme.colors.dark[6]
               : theme.colors.gray[0],
         },
-        fontWeight: path === router.pathname ? 'bold' : 'normal',
+        fontWeight: router.pathname.startsWith(path) ? 'bold' : 'normal',
       })}
       onClick={() => router.push(path)}
     >

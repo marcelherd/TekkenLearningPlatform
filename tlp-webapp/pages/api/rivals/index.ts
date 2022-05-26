@@ -6,7 +6,9 @@ export interface Rival {
   name: string;
   wins: number;
   losses: number;
+  draws: number;
   lastPlayed: Date;
+  lastPlayedId: number;
 }
 
 export default async function handler(
@@ -50,14 +52,20 @@ export default async function handler(
         ({ playerRoundWins, opponentRoundWins }) =>
           playerRoundWins > opponentRoundWins
       ).length;
-      const totalLosses = totalGames - totalWins;
+      const totalLosses = allMatches.filter(
+        ({ playerRoundWins, opponentRoundWins }) =>
+          playerRoundWins < opponentRoundWins
+      ).length;
+      const totalDraws = totalGames - totalWins - totalLosses;
       const lastPlayed = latestMatch.createdAt;
 
       return {
         name: rival.opponent,
         wins: totalWins,
         losses: totalLosses,
+        draws: totalDraws,
         lastPlayed,
+        lastPlayedId: latestMatch.id,
       } as Rival;
     })
   );

@@ -52,7 +52,7 @@ function MyApp(props: MyProps) {
           <Component {...pageProps} />
         </MantineProvider>
       </ColorSchemeProvider>
-      <ReactQueryDevtools />
+      {/* <ReactQueryDevtools /> */}
     </QueryClientProvider>
   );
 }

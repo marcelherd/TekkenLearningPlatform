@@ -1,6 +1,14 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { AppShell, Navbar, Header, Table, Text, Title } from '@mantine/core';
+import {
+  AppShell,
+  Navbar,
+  Header,
+  Table,
+  Text,
+  Title,
+  Anchor,
+} from '@mantine/core';
 import axios from 'axios';
 
 import Brand from '@/components/Brand';
@@ -19,6 +27,10 @@ async function fetchHistory() {
 const History: NextPage = () => {
   const router = useRouter();
   const { data, status } = useQuery<Match[]>('history', fetchHistory);
+
+  if (!data) {
+    return <span>Loading...</span>;
+  }
 
   const handleSelectRow = (match: Match) => {
     router.push(`/history/${match.id}`);
@@ -49,6 +61,17 @@ const History: NextPage = () => {
         <Navbar width={{ base: 250 }} p="xs">
           <Navbar.Section grow mt="md">
             <MainLinks />
+          </Navbar.Section>
+          <Navbar.Section mt="md">
+            <Text align="center">
+              Made by{' '}
+              <Anchor
+                target="_blank"
+                href="https://steamcommunity.com/id/shishigami/"
+              >
+                Sταrs
+              </Anchor>
+            </Text>
           </Navbar.Section>
         </Navbar>
       }
