@@ -51,7 +51,7 @@ const onMatchEnd = async ({ match, score }: MatchEndEventData) => {
       data: {
         stage: match.stage,
         playerCharacter: match.player.character,
-        playerRank: match.player.rank,
+        playerRank: match.player.rank, // FIXME: not the correct memory address
         opponentCharacter: match.opponent.character,
         opponentRank: match.opponent.rank,
         opponent: match.opponent.name,

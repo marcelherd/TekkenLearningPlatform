@@ -190,6 +190,7 @@ export default class GameState extends TypedEmitter<TekkenEvents> {
   }
 
   fetchRank(playerOffsets: PlayerOffsets): string {
+    // FIXME: Occasionally this is off by one
     const rank = this.getValue(playerOffsets.rank);
     return parseRank(rank);
   }

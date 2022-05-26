@@ -6,7 +6,7 @@ export const p1: PlayerOffsets = {
   attackInput: `0x34DC030 0x1A5C`,
   directionInput: `0x34DC030 0xDDC`,
   roundWins: `0x34CA400`, // or 0x35216F8
-  rank: `0x34DBF4C`,
+  rank: `0x34DBF4C`, // FIXME: not the correct memory address?
 };
 
 export const p2: PlayerOffsets = {

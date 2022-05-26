@@ -41,7 +41,7 @@ async function uploadVideo(
           body: fs.createReadStream(path),
         },
       },
-      (err, res) => {
+      async (err, res) => {
         if (err) {
           log.error('Failed to upload recording', err);
         }
@@ -49,11 +49,10 @@ async function uploadVideo(
         const videoUrl = `https://www.youtube.com/watch?v=${res?.data.id}`;
         log.debug('Recording uploaded', { videoUrl });
 
-        console.log('matchIds', matchIds);
         if (matchIds && matchIds.length > 0) {
-          db.match.updateMany({
+          await db.match.updateMany({
             where: {
-              id: { in: matchIds },
+              id: { in: [...matchIds] },
             },
             data: {
               recordingUrl: videoUrl,
