@@ -110,7 +110,7 @@ cd TekkenLearningPlatform/tlp-recorder
 yarn install
 # Set up database
 yarn prisma migrate dev
-# Create the config file
+# Create the config file, see section below for specifics
 touch .env
 
 cd ../tlp-webapp
@@ -133,8 +133,23 @@ Certain features of the recorder can be activated and deactivated or fine-tuned 
 | OBS_GRACE_PERIOD     | How many milliseconds to wait before uploading a recording after it was just saved by OBS.                                                                                                                                                                                                                                                                        | 500              |
 | MAX_BATCH_SIZE       | How many matches are included per video recording. As each video upload to YouTube requires a fixed amount of quota, it is quickly reached if you were to upload each match as a separate video. Set as high as possible to avoid reaching your quota too quickly. The program automatically pauses the recording between matches.                                | 10               |
 | RECORDING_DIR_PATH   | The location on your harddrive where video recordings will be saved. You most likely HAVE to change this.                                                                                                                                                                                                                                                         | E:/Recording/TLP |
+| OBS_WS_SECRET        | If you want to record your matches via OBS, you HAVE to enter your secret key here                                                                                                                                                                                                                                                                                |                  |
+| LOG_LEVEL            | Set to `verbose` if you want more detailed logging.                                                                                                                                                                                                                                                                                                               |                  |
+| DEBUG                | Set to `prisma*` if you want debug logging for the database access.                                                                                                                                                                                                                                                                                               |                  |
 
 All available environment variables and their default values can also be found in [config.ts](https://github.com/marcelherd/TekkenLearningPlatform/blob/master/tlp-recorder/src/config.ts).
+
+I recommend starting with the following sample `.env` file:
+
+```
+RECORDING_DIR_PATH=C:/temp/
+# If you want to record your games, fill this in:
+OBS_WS_SECRET=
+```
+
+You can find your OBS secret by starting up OBS Studio, clicking on `Tools` -> `obs-websocket Settings` -> `Show Connect Info` (`Server Password`). Ensure that the `Server Port` is set to `4455`.
+
+If you want to upload your videos to YouTube, follow [this guide](https://developers.google.com/youtube/v3/quickstart/nodejs#step_1_turn_on_the) to create your credentials and save them to `tlp-recorder/credentials/google.keys.json`. Make sure to create a web client and use the following redirect URL: `http://localhost:5431/callback`.
 
 ### Running the application
 
