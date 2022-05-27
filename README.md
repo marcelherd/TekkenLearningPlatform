@@ -31,7 +31,7 @@
   - [Run Locally](#run-locally)
   - [Deployment](#deployment)
 - [License](#license)
-- [Contact](#contact)
+- [Contributing](#contributing)
 - [Acknowledgements](#acknowledgements)
 
 ## About the Project
@@ -104,7 +104,7 @@ Work in progress
 # TODO
 ```
 
-### Run Locally
+### Running the application
 
 ```sh
 # TODO
@@ -114,6 +114,9 @@ Work in progress
 
 Distributed under the [GNU GPLv3](https://choosealicense.com/licenses/mit/) License. See LICENSE.txt for more information.
 
+## Contributing
+
+Contributions are very welcome and much needed! As it is, the project is very barebones but functional. If you'd like to collaborate, you can find me on the [Modding Zaibatsu](https://discord.gg/nCAeJE4z5U) Discord.
 
 ## Acknowledgements
 
