@@ -87,9 +87,9 @@ The project is split into two modules:
   -  Button presses can be sent to OBS Studio to show up in the recording or in streams
   -  Recordings can get uploaded to YouTube automatically
 -  `tlp-webapp`
-  -  Using Next.js/React/TypeScript, it starts up a web application that displays the data that was recoded by `tlp-recorder`
-  -  It computes relevant statistics for your characters including matchup and stage statistics
-  -  It shows your match history and allows you to view your uploaded video recordings for each match
+   -  Using Next.js/React/TypeScript, it starts up a web application that displays the data that was recoded by `tlp-recorder`
+   -  It computes relevant statistics for your characters including matchup and stage statistics
+   -  It shows your match history and allows you to view your uploaded video recordings for each match
 
 ### Prerequisites
 
