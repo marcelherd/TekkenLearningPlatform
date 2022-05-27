@@ -71,7 +71,11 @@ TekkenLearningPlatform keeps track of your matches and provides statistics to he
 
 ### Screenshots
 
-<img src="https://placehold.co/600x400?text=Working+on+it" alt="screenshot" />
+<img src="https://raw.githubusercontent.com/marcelherd/TekkenLearningPlatform/master/docs/dashboard.png" alt="Dashboard" />
+<img src="https://raw.githubusercontent.com/marcelherd/TekkenLearningPlatform/master/docs/character_detail.png" alt="Character Statistics" />
+<img src="https://raw.githubusercontent.com/marcelherd/TekkenLearningPlatform/master/docs/match_history.png" alt="Match History" />
+<img src="https://raw.githubusercontent.com/marcelherd/TekkenLearningPlatform/master/docs/match_detail.png" alt="Match Details" />
+<img src="https://raw.githubusercontent.com/marcelherd/TekkenLearningPlatform/master/docs/rivals.png" alt="Rivals" />
 
 ## Installation
 
