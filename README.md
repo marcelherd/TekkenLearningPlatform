@@ -83,6 +83,18 @@ Work in progress
 
 ## Development
 
+The project is split into two modules:
+
+- `tlp-recorder`
+  -  Using Node.js/TypeScript, it reads Tekken's process memory to determine the game's state and saves that information to a SQLite database
+  -  Optionally it can communicate with OBS Studio using websockets to automatically start recording as you get into matches and automatically pauses the recording when the match is done
+  -  Button presses can be sent to OBS Studio to show up in the recording or in streams
+  -  Recordings can get uploaded to YouTube automatically
+-  `tlp-webapp`
+  -  Using Next.js/React/TypeScript, it starts up a web application that displays the data that was recoded by `tlp-recorder`
+  -  It computes relevant statistics for your characters including matchup and stage statistics
+  -  It shows your match history and allows you to view your uploaded video recordings for each match
+
 ### Prerequisites
 
 - Node.js v16.x.x (current LTS version)
@@ -95,19 +107,27 @@ Work in progress
 ### Installation
 
 ```sh
-# TODO
-```
+git clone https://github.com/marcelherd/TekkenLearningPlatform.git
+cd TekkenLearningPlatform/tlp-recorder
 
-### Running Tests
+# Install dependencies
+yarn install
+# Set up database
+yarn prisma migrate dev
 
-```sh
-# TODO
+cd ../tlp-webapp
+yarn install
 ```
 
 ### Running the application
 
+Both module are started the same way:
+
 ```sh
-# TODO
+# Run the application normally
+yarn start
+# Or run in development mode to automatically reload when code changes occur
+yarn dev
 ```
 
 ## License
