@@ -49,6 +49,8 @@ TekkenLearningPlatform keeps track of your matches and provides statistics to he
 
 ### Planned Features
 
+- Literally any kind of error handling
+- Handle cleanup when the recorder process is exited manually
 - Queue up video uploads and wait until the game is closed to do so
 - Improve display of input notations in the recording
 - Add frame data to the recording
@@ -62,6 +64,8 @@ TekkenLearningPlatform keeps track of your matches and provides statistics to he
 
 ### Known Bugs and Limitations
 
+- There is virtually no error handling, if you don't use the program in exactly the way it is intended you are on your own
+- If you close the recorder process, it will not stop any active recordings or clean up after itself in any way
 - Matches ending prematurely e.g. due to disconnects are not detected properly
 - Videos are uploaded to YouTube during gameplay which may results in a bad connection
 
@@ -75,7 +79,7 @@ TekkenLearningPlatform keeps track of your matches and provides statistics to he
 
 ## Installation
 
-Work in progress
+See below, there is no easy way to start up the program for users yet.
 
 ## Development
 
@@ -161,6 +165,10 @@ yarn start
 # Or run in development mode to automatically reload when code changes occur
 yarn dev
 ```
+
+The web application can be started up anytime, but you should have created the database file already by running `yarn prisma migrate dev` in the `tlp-recorder` module.
+
+The recorder should be started up when Tekken 7 is already running.
 
 ## License
 
