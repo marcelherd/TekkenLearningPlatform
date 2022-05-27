@@ -43,7 +43,7 @@ TekkenLearningPlatform keeps track of your matches and provides statistics to he
 - A web application that shows you key performance metrics for your characters
   - Statistics for certain matchups and stages
   - A list of your most played opponents ("rivals") and how you perform against them
-  - A match history allowing you to check details for every single match you played and watch the recording of it
+  - A match history allowing you to check details for every single match you played and watch your recording
 - Automatically upload your recordings to your YouTube channel
 - Individual featues can be turned on/off via undocumented environment variables (hehe)
 
