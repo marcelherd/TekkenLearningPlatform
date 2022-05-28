@@ -14,6 +14,8 @@
  * @author Marcel Herd
  */
 
+import path from 'path';
+
 import { PrismaClient } from '@prisma/client';
 
 declare global {
@@ -21,10 +23,20 @@ declare global {
   var prisma: PrismaClient | undefined;
 }
 
+const databaseUrl =
+  process.env.NODE_ENV === 'development'
+    ? 'file:./database.db'
+    : `file:${path.join(process.cwd(), 'database.db')}`;
+
 const prisma =
   global.prisma ||
   new PrismaClient({
     log: ['query'],
+    datasources: {
+      db: {
+        url: databaseUrl,
+      },
+    },
   });
 
 export default prisma;
