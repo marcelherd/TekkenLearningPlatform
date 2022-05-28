@@ -36,19 +36,20 @@ TekkenLearningPlatform keeps track of your matches and provides statistics to he
 
 ### Features
 
-- Detect when you enter and exit matches
+- Detects when you enter and exit matches
   - Automatically start recording to video when you enter a match
   - Automatically pause recording when you exit a match
   - Match results are saved
 - A web application that shows you key performance metrics for your characters
   - Statistics for certain matchups and stages
-  - A list of your most played opponents ("rivals") and how you perform against them
+  - A list of your most played opponents (rivals) and how you perform against them
   - A match history allowing you to check details for every single match you played and watch your recording
-- Automatically upload your recordings to your YouTube channel
-- Individual featues can be turned on/off via undocumented environment variables (hehe)
+- Automatically uploads your recordings to your YouTube channel
+- Individual featues can be turned on/off, see [Configuration](#configuration)
 
 ### Planned Features
 
+- Make it easier to change the configuration
 - Literally any kind of error handling
 - Handle cleanup when the recorder process is exited manually
 - Queue up video uploads and wait until the game is closed to do so
@@ -67,7 +68,7 @@ TekkenLearningPlatform keeps track of your matches and provides statistics to he
 - There is virtually no error handling, if you don't use the program in exactly the way it is intended you are on your own
 - If you close the recorder process, it will not stop any active recordings or clean up after itself in any way
 - Matches ending prematurely e.g. due to disconnects are not detected properly
-- Videos are uploaded to YouTube during gameplay which may results in a bad connection
+- Videos are uploaded to YouTube during gameplay which may result in a bad connection
 
 ### Screenshots
 
@@ -102,7 +103,7 @@ The project is split into two modules:
 - To record videos, you need OBS Studio, using either
   - OBS Studio 27.2.0 or above with the [obs-websocket](https://github.com/obsproject/obs-websocket/releases/tag/5.0.0-beta1) plugin installed
   - OBS Studio 28.0.0 or above which includes this plugin by default
-- To upload videos, you need to create a Google Cloud Platform project and create an OAuth client with redirect uri `http://localhost:5431/callback`
+- To upload videos, you need to create a Google Cloud Platform project and set up credentials there (see [Configuration](#configuration))
 
 ### Installation
 
