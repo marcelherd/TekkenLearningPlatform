@@ -6,7 +6,6 @@
     "moduleResolution": "node",
     "baseUrl": ".",
     "outDir": "./dist",
-    "noEmit": true,
     "isolatedModules": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
