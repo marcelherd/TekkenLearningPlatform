@@ -1,0 +1,83 @@
+name: Create test release
+
+on:
+  push:
+    branches: [ pkg ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build-recorder:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install commands
+        run: |
+          npm install -g pkg,
+          npm install -g yarn
+      - name: Install dependencies
+        working-directory: ./tlp-recorder
+        run: yarn install
+      - name: Generate Prisma client
+        working-directory: ./tlp-recorder
+        run: yarn prisma generate
+      - name: Build
+        working-directory: ./tlp-recorder
+        run: yarn build
+      - name: Package
+        working-directory: ./tlp-recorder
+        run: pkg .
+      - uses: actions/upload-artifact@master
+        with:
+          name: recorder-exe
+          path: ./tlp-recorder/pkg/tlp-recorder.exe
+  build-webapp:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install commands
+        run: |
+          npm install -g pkg,
+          npm install -g yarn
+      - name: Install dependencies
+        working-directory: ./tlp-webapp
+        run: yarn install
+      - name: Generate Prisma client
+        working-directory: ./tlp-webapp
+        run: yarn prisma generate
+      - name: Build
+        working-directory: ./tlp-webapp
+        run: yarn build
+      - name: Package
+        working-directory: ./tlp-webapp
+        run: pkg .
+      - uses: actions/upload-artifact@master
+        with:
+          name: webapp-exe
+          path: ./tlp-webapp/pkg/tlp-webapp.exe
+  create-release:
+    needs: [build-recorder, build-webapp]
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@master
+        with:
+          name: recorder-exe
+          path: ./bin/
+      - uses: actions/download-artifact@master
+        with:
+          name: webapp-exe
+          path: ./bin/
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ./bin/**/*
+      
