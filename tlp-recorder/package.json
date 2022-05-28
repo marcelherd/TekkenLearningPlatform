@@ -5,6 +5,9 @@
   "main": "./dist/src/index.js",
   "bin": "./dist/src/index.js",
   "pkg": {
+    "assets": [
+      "node_modules/.prisma/**/*"
+    ],
     "scripts": [
       "./dist/**/*.js"
     ],
