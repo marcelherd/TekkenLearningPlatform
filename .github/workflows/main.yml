@@ -3,6 +3,8 @@ name: Create test release
 on:
   push:
     branches: [ pkg ]
+    tags:
+      - "v*.*.*"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
