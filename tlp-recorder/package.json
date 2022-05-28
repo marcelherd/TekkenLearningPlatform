@@ -2,11 +2,22 @@
   "name": "tlp-recorder",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.js",
+  "main": "./dist/src/index.js",
+  "bin": "./dist/src/index.js",
+  "pkg": {
+    "scripts": [
+      "./dist/**/*.js"
+    ],
+    "targets": [
+      "node16-win-x64"
+    ],
+    "outputPath": "pkg"
+  },
   "scripts": {
     "test": "jest",
     "start": "ts-node -r tsconfig-paths/register --files ./src/index.ts",
-    "dev": "ts-node-dev -r tsconfig-paths/register --inspect --respawn --rs --transpile-only --files ./src/index.ts"
+    "dev": "ts-node-dev -r tsconfig-paths/register --inspect --respawn --rs --transpile-only --files ./src/index.ts",
+    "build": "tsc && tsc-alias"
   },
   "author": "Marcel Herd",
   "license": "GPL-3.0-or-later",
@@ -31,6 +42,7 @@
     "ts-jest": "^28.0.2",
     "ts-node": "^10.7.0",
     "ts-node-dev": "^1.1.8",
+    "tsc-alias": "^1.6.7",
     "tsconfig-paths": "^4.0.0",
     "typescript": "^4.6.4"
   },

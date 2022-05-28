@@ -1,5 +1,23 @@
 {
   "private": true,
+  "name": "tlp-webapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./server.js",
+  "bin": "./server.js",
+  "pkg": {
+    "assets": [
+      ".next/**/*",
+      "node_modules/.prisma/**/*"
+    ],
+    "scripts": [
+      ".next/dist/**/*.js"
+    ],
+    "targets": [
+      "node16-win-x64"
+    ],
+    "outputPath": "pkg"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",

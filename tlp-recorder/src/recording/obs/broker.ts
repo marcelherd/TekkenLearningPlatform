@@ -1,7 +1,7 @@
 import OBSWebSocket from 'obs-websocket-js';
 
-import { TickEventData } from '@/tekken/state';
 import getNotation from '@/tekken/notation';
+import { TickEventData } from '@/types/types';
 
 export default class Broker {
   private static instance: Broker;
