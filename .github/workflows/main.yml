@@ -18,7 +18,7 @@ jobs:
           node-version: 16
       - name: Install commands
         run: |
-          npm install -g pkg,
+          npm install -g pkg
           npm install -g yarn
       - name: Install dependencies
         working-directory: ./tlp-recorder
@@ -45,7 +45,7 @@ jobs:
           node-version: 16
       - name: Install commands
         run: |
-          npm install -g pkg,
+          npm install -g pkg
           npm install -g yarn
       - name: Install dependencies
         working-directory: ./tlp-webapp
