@@ -3,12 +3,21 @@ import express from 'express';
 import { google } from 'googleapis';
 import { OAuth2Client } from 'googleapis/node_modules/google-auth-library';
 
-import credentials from '#/google.keys.json';
 import log from '@/helpers/log';
 
 const { OAuth2 } = google.auth;
 
 const SCOPES = ['https://www.googleapis.com/auth/youtube.upload'];
+
+// TODO: Dummy object to make packaging work for now, have to replace this along with
+// creating a better way to allow users to adjust the configuration
+const credentials = {
+  web: {
+    client_id: '',
+    client_secret: '',
+    redirect_uris: [''],
+  },
+};
 
 export default async function getAuthenticatedClient(): Promise<OAuth2Client> {
   return new Promise((resolve, reject) => {
