@@ -48,6 +48,16 @@ settings:
     # User preferences
     # -----------------------------------------
 
+    # The port configured in your OBS Studio Websocket settings.
+    # See also:
+    # https://github.com/marcelherd/TekkenLearningPlatform/wiki/OBS-Studio-Setup
+    obsWebsocketPort: 4455
+
+    # The password configured in your OBS Studio Websocket settings.
+    # See also:
+    # https://github.com/marcelherd/TekkenLearningPlatform/wiki/OBS-Studio-Setup
+    obsWebsocketPassword: "change-me"
+
     # Where to save video recordings.
     # It is recommended to configure "flv" as "Recording Format"
     # in OBS Studio if you plan on uploading them to YouTube automatically.
@@ -81,3 +91,6 @@ settings:
 
     # How often the game state is updated (interval in ms).
     tickInterval: 1
+
+    # Uncomment to enable database debug logging.
+    # DEBUG: "prisma*"
