@@ -1,8 +1,8 @@
 import log from 'npmlog';
 
-import getEnvironmentVariable from '@/helpers/environment';
+import config from '@/config';
 
-log.level = getEnvironmentVariable('LOG_LEVEL', 'info');
+log.level = config.LOG_LEVEL;
 
 // FIXME: For some reason any logging with args is output twice.
 // The first time it includes args and the second time it does not.

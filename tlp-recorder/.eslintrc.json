@@ -12,6 +12,7 @@
     "project": "./tsconfig.json"
   },
   "plugins": ["@typescript-eslint", "jest", "prettier"],
+  "ignorePatterns": ["temp.js", "dist/**/*"],
   "rules": {
     "prettier/prettier": "error",
     "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],

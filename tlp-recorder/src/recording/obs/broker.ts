@@ -1,5 +1,7 @@
 import OBSWebSocket from 'obs-websocket-js';
 
+import config from '@/config';
+import log from '@/helpers/log';
 import getNotation from '@/tekken/notation';
 import { TickEventData } from '@/types/types';
 
@@ -23,7 +25,8 @@ export default class Broker {
   }
 
   async connect(): Promise<void> {
-    await this.obs.connect('ws://127.0.0.1:4455', process.env.OBS_WS_SECRET);
+    await this.obs.connect(`ws://127.0.0.1:${config.OBS_WS_PORT}`, config.OBS_WS_PASSWORD);
+    log.info('Connected to OBS');
   }
 
   async startRecording(): Promise<void> {

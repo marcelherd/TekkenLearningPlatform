@@ -58,7 +58,8 @@ settings:
     # https://github.com/marcelherd/TekkenLearningPlatform/wiki/OBS-Studio-Setup
     obsWebsocketPassword: "change-me"
 
-    # Where to save video recordings.
+    # Where you instructed OBS to save your video recordings. This must be
+    # configured if "enableVideoUpload" and "enableCleanup" are enabled.
     # It is recommended to configure "flv" as "Recording Format"
     # in OBS Studio if you plan on uploading them to YouTube automatically.
     recordingPath: "C:/temp/TekkenLearningPlatform"
@@ -91,6 +92,3 @@ settings:
 
     # How often the game state is updated (interval in ms).
     tickInterval: 1
-
-    # Uncomment to enable database debug logging.
-    # DEBUG: "prisma*"

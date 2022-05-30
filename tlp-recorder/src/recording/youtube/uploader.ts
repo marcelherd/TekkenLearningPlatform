@@ -5,7 +5,7 @@ import { OAuth2Client } from 'googleapis/node_modules/google-auth-library';
 
 import db from '@/database';
 import log from '@/helpers/log';
-import { CLEANUP_ENABLED } from '@/config';
+import config from '@/config';
 import getLatestVideoPath, { scheduleCleanup } from '@/recording/util';
 import { VideoOptions } from '@/types/types';
 
@@ -47,7 +47,7 @@ async function uploadVideo(
         }
 
         const videoUrl = `https://www.youtube.com/watch?v=${res?.data.id}`;
-        log.debug('Recording uploaded', { videoUrl });
+        log.info(`Upload finished: ${videoUrl}`);
 
         if (matchIds && matchIds.length > 0) {
           await db.match.updateMany({
@@ -61,7 +61,7 @@ async function uploadVideo(
           log.debug('Adding YouTube URL to matches', { matchIds });
         }
 
-        if (CLEANUP_ENABLED) {
+        if (config.ENABLE_CLEANUP) {
           scheduleCleanup(path);
         }
       },

@@ -18,8 +18,8 @@
   },
   "scripts": {
     "test": "jest",
-    "start": "ts-node -r tsconfig-paths/register --files ./src/index.ts",
-    "dev": "ts-node-dev -r tsconfig-paths/register --inspect --respawn --rs --transpile-only --files ./src/index.ts",
+    "start": "set NODE_ENV=production&& ts-node -r tsconfig-paths/register --files ./src/index.ts",
+    "dev": "set NODE_ENV=development&& ts-node-dev -r tsconfig-paths/register --inspect --respawn --rs --transpile-only --files ./src/index.ts",
     "build": "tsc && tsc-alias"
   },
   "author": "Marcel Herd",
@@ -59,6 +59,7 @@
     "npmlog": "^6.0.2",
     "obs-websocket-js": "^5.0.0-beta.1",
     "open": "^8.4.0",
-    "tiny-typed-emitter": "^2.1.0"
+    "tiny-typed-emitter": "^2.1.0",
+    "yaml": "^2.1.1"
   }
 }

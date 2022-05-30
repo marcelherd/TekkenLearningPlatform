@@ -15,7 +15,7 @@
  *
  * @throws {@link Error} Will throw an error if the specified environment variable does not exist and no default value is provided
  */
-export default function getEnvironmentVariable(name: string, defaultValue?: string): string {
+export default function getEnvironmentString(name: string, defaultValue?: string): string {
   const value = process.env[name] ?? defaultValue;
   if (!value) {
     throw new Error(`Required environment variable not set: ${name}`);
@@ -23,7 +23,15 @@ export default function getEnvironmentVariable(name: string, defaultValue?: stri
   return value;
 }
 
-export function isFlagSet(name: string, defaultValue?: boolean): boolean {
-  const value = getEnvironmentVariable(name, String(defaultValue));
+export function getEnvironmentBool(name: string, defaultValue?: boolean): boolean {
+  const value = getEnvironmentString(name, String(defaultValue));
   return value === 'true';
+}
+
+export function getEnvironmentNumber(name: string, defaultValue?: number): number {
+  const value = getEnvironmentString(name, String(defaultValue));
+  if (!Number.isNaN(value)) {
+    return Number(value);
+  }
+  throw new Error(`Required environment variable ${name} should be a number: ${value}`);
 }
