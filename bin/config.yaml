@@ -1,0 +1,83 @@
+settings:
+  recorder:
+    # -----------------------------------------
+    # Enable/disable functionalities
+    # -----------------------------------------
+
+    # If enabled, the recorder will keep track of any matches you play and add
+    # them to your match history as well as consider them when computing
+    # your statistics.
+    enableDatabaseSync: true
+
+    # If enabled, the recorder will send any button presses you or your
+    # opponent input to OBS Studio.
+    # This requires OBS Studio to be running prior to starting the
+    # recorder module. See also:
+    # https://github.com/marcelherd/TekkenLearningPlatform/wiki/OBS-Studio-Setup
+    enableNotationSync: false
+
+    # If enabled, the recorder will automatically record your matches as
+    # video as you're playing. It will start recording when your match
+    # starts and automatically end the recording when it finishes.
+    # If the setting "matchesPerRecording" is greater than one, it will
+    # automatically pause and resume the recording in between matches.
+    # This requires OBS Studio to be running prior to starting the
+    # recorder module. See also:
+    # https://github.com/marcelherd/TekkenLearningPlatform/wiki/OBS-Studio-Setup
+    enableVideoRecording: false
+
+    # If enabled, the recorder will automatically upload your video recordings
+    # once they are saved (i.e. when "matchesPerRecording" games have been played).
+    # Enabling this setting does not do anything unless video recordings are enabled
+    # as well.
+    # This requires OBS Studio to be running prior to starting the
+    # recorder module. See also:
+    # https://github.com/marcelherd/TekkenLearningPlatform/wiki/OBS-Studio-Setup
+    enableVideoUpload: false
+
+    # If enabled, the recorder will automatically delete any video recordings it has
+    # saved on your local filesystem after they have been uploaded.
+    # Enabling this setting does not do anything unless "enableVideoRecording" and
+    # "enableVideoUpload" have both been enabled as well.
+    # This requires OBS Studio to be running prior to starting the
+    # recorder module. See also:
+    # https://github.com/marcelherd/TekkenLearningPlatform/wiki/OBS-Studio-Setup
+    enableCleanup: true
+
+    # -----------------------------------------
+    # User preferences
+    # -----------------------------------------
+
+    # Where to save video recordings.
+    # It is recommended to configure "flv" as "Recording Format"
+    # in OBS Studio if you plan on uploading them to YouTube automatically.
+    recordingPath: "C:/temp/TekkenLearningPlatform"
+
+    # How many matches to save per video recording.
+    # If recordings are uploaded to YouTube, set as high as possible
+    # as the daily maximum quota is used up per video uploaded irrelevant
+    # of video length.
+    matchesPerRecording: 10
+
+    # How many milliseconds to wait for OBS Studio to finish
+    # saving the video recording.
+    # If YouTube is unable to process uploaded videos correctly, consider
+    # increasing the delay as it might be getting uploaded before OBS
+    # has finished writing the file properly.
+    uploadDelay: 500
+
+    # How many milliseconds to wait after a video recording has finished
+    # uploading to YouTube, before deleting it from the local filesystem.
+    # If YouTube is unable to process uploaded videos correctly, consider
+    # increasing the delay as it might be getting deleted too soon.
+    cleanupDelay: 5000
+
+    # -----------------------------------------
+    # Developer settings
+    # -----------------------------------------
+
+    # Set to "verbose" to enable debug logging.
+    logLevel: "info"
+
+    # How often the game state is updated (interval in ms).
+    tickInterval: 1
