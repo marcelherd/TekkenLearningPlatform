@@ -199,7 +199,7 @@ async function fetchSettings() {
   return response.data;
 }
 
-const Settings: NextPage = () => {
+const SettingsPage: NextPage = () => {
   const { data, status } = useQuery<Settings>('settings', fetchSettings);
 
   return (
@@ -245,4 +245,4 @@ const Settings: NextPage = () => {
   );
 };
 
-export default Settings;
+export default SettingsPage;
