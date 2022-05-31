@@ -78,9 +78,9 @@ TekkenLearningPlatform keeps track of your matches and provides statistics to he
 <img src="https://raw.githubusercontent.com/marcelherd/TekkenLearningPlatform/master/docs/match_detail.png" alt="Match Details" />
 <img src="https://raw.githubusercontent.com/marcelherd/TekkenLearningPlatform/master/docs/rivals.png" alt="Rivals" />
 
-## Installation
+## Great, how do I use it?
 
-See below, there is no easy way to start up the program for users yet.
+Please refer to the [installation instructions](https://github.com/marcelherd/TekkenLearningPlatform/wiki/Installation).
 
 ## Development
 
@@ -170,6 +170,49 @@ yarn dev
 The web application can be started up anytime, but you should have created the database file already by running `yarn prisma migrate dev` in the `tlp-recorder` module.
 
 The recorder should be started up when Tekken 7 is already running.
+
+### Building the application
+
+```sh
+# Required tools
+npm install -g pkg
+npm install -g yarn
+
+# Checkout
+git clone https://github.com/marcelherd/TekkenLearningPlatform.git
+cd ./TekkenLearningPlatform
+
+# Building the recorder
+cd ./tlp-recorder
+yarn install
+yarn prisma generate
+yarn build
+pkg .
+cd ..
+
+# Building the webapp
+cd ./tlp-webapp
+yarn install
+yarn prisma generate
+yarn build
+pkg .
+cd ..
+
+# Assemble /bin directory
+cd ./bin
+cp ../tlp-recorder/pkg/tlp-recorder.exe .
+cp ../tlp-webapp/pkg/tlp-webapp.exe .
+```
+
+The `/bin` directory already includes a blank `database.db` file. You can build it yourself:
+
+```sh
+cd ./tlp-recorder
+yarn prisma migrate dev
+cp ./prisma/database.db ../bin
+```
+
+See also: [.github/workflows/main.yml](https://github.com/marcelherd/TekkenLearningPlatform/blob/master/.github/workflows/main.yml).
 
 ## License
 
