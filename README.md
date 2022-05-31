@@ -24,7 +24,7 @@
 # Table of Contents
 
 - [About the Project](#about-the-project)
-- [Great, how do I use it?](#great-how-do-i-use-it))
+- [Great, how do I use it?](#great-how-do-i-use-it)
 - [Development](#development)
 - [License](#license)
 - [Contributing](#contributing)
