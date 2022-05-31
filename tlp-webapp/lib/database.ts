@@ -18,20 +18,21 @@ import path from 'path';
 
 import { PrismaClient } from '@prisma/client';
 
+import { isDevl, isProd } from '@/lib/util';
+
 declare global {
   // eslint-disable-next-line
   var prisma: PrismaClient | undefined;
 }
 
-const databaseUrl =
-  process.env.NODE_ENV === 'development'
-    ? 'file:../../tlp-recorder/prisma/database.db'
-    : `file:${path.join(process.cwd(), 'database.db')}`;
+const databaseUrl = isDevl()
+  ? 'file:../../tlp-recorder/prisma/database.db'
+  : `file:${path.join(process.cwd(), 'database.db')}`;
 
 const prisma =
   global.prisma ||
   new PrismaClient({
-    log: ['query'],
+    log: [],
     datasources: {
       db: {
         url: databaseUrl,
@@ -41,4 +42,4 @@ const prisma =
 
 export default prisma;
 
-if (process.env.NODE_ENV !== 'production') global.prisma = prisma;
+if (!isProd()) global.prisma = prisma;

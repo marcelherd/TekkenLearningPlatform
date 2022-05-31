@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@mantine/core": "^4.1.4",
+    "@mantine/form": "^4.2.7",
     "@mantine/hooks": "^4.1.4",
     "@mantine/next": "^4.1.4",
     "@prisma/client": "^3.14.0",
