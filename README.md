@@ -216,7 +216,7 @@ See also: [.github/workflows/main.yml](https://github.com/marcelherd/TekkenLearn
 
 ## License
 
-Distributed under the [GNU GPLv3](https://choosealicense.com/licenses/mit/) License. See LICENSE.txt for more information.
+Source code is distributed under the [GNU GPLv3](https://choosealicense.com/licenses/gpl-3.0/) License. See LICENSE.txt for more information.
 
 ## Contributing
 
