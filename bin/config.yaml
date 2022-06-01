@@ -68,7 +68,9 @@ settings:
     # If recordings are uploaded to YouTube, set as high as possible
     # as the daily maximum quota is used up per video uploaded irrelevant
     # of video length.
-    matchesPerRecording: 10
+    # If set to 1, it will create a separate video for each match and
+    # rename the video appropriately.
+    matchesPerRecording: 1
 
     # How many milliseconds to wait for OBS Studio to finish
     # saving the video recording.

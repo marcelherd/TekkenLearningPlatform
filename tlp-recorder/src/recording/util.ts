@@ -31,3 +31,25 @@ export function removeLatestVideo() {
     fs.unlinkSync(videoPath);
   }
 }
+
+export function scheduleRename(newFileName: string, pathToExistingFile?: string) {
+  setTimeout(() => {
+    try {
+      const filePathToRename = pathToExistingFile ?? getLatestVideoPath();
+      if (filePathToRename) {
+        const folder = path.dirname(filePathToRename);
+        const extension = path.extname(filePathToRename);
+        const newFileNameExt = newFileName + extension;
+        const newFilePath = path.join(folder, newFileNameExt);
+        fs.renameSync(filePathToRename, newFilePath);
+        log.debug(`Renamed ${filePathToRename} to ${newFileNameExt}`);
+      }
+    } catch (err) {
+      if (err instanceof Error) {
+        log.error(`Failed to rename recording: ${err.message}`);
+      } else {
+        log.error('Failed to rename recording', err);
+      }
+    }
+  }, config.OBS_CLEANUP_DELAY);
+}

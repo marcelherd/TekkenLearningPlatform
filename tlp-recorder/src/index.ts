@@ -5,7 +5,7 @@ import { OAuth2Client } from 'googleapis/node_modules/google-auth-library';
 import db from '@/database';
 import log from '@/helpers/log';
 import Broker from '@/recording/obs/broker';
-import { removeLatestVideo } from '@/recording/util';
+import getLatestVideoPath, { removeLatestVideo, scheduleRename } from '@/recording/util';
 import uploadLatestVideo from '@/recording/youtube/uploader';
 import getAuthenticatedClient from '@/recording/youtube/auth';
 import GameState from '@/tekken/state';
@@ -102,6 +102,20 @@ const onMatchEnd = async ({ match, score }: MatchEndEventData) => {
           config.OBS_UPLOAD_DELAY,
           batchMatchIds,
         );
+      }
+
+      // If each match has its own recording, we can rename the recording file to be more descriptive
+      if (config.OBS_BATCH_SIZE === 1) {
+        const pChar = match.player.character;
+        const opChar = match.opponent.character;
+        const pRounds = score.playerWins;
+        const opRounds = score.opponentWins;
+        const { outcome } = score;
+
+        // YYYY-MM-DD hh_mm_ss
+        const date = new Date().toISOString().replace('T', ' ').replace(/:/g, '_').substring(0, 19);
+        const newName = `${pChar} vs ${opChar} ${pRounds}-${opRounds} ${outcome} (${date})`;
+        scheduleRename(newName);
       }
 
       currentBatchSize = 0;
