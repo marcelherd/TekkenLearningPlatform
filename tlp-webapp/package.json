@@ -33,6 +33,7 @@
     "cookies-next": "^2.0.4",
     "date-fns": "^2.28.0",
     "next": "latest",
+    "open": "^8.4.0",
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "react-query": "^3.39.0",
