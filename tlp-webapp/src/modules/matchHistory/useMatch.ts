@@ -11,6 +11,7 @@ async function findById(id: string | number) {
 
 export default function useMatch(id?: string | number) {
   const router = useRouter();
-  const matchId = id ?? (router.query.id as string); // FIXME: this is "undefined" on the first render
-  return useQuery<Match, Error>(['match', id], () => findById(matchId));
+  const matchId = id ?? (router.query.id as string);
+  console.log('matchId', matchId);
+  return useQuery<Match, Error>(['match', matchId], () => findById(matchId));
 }

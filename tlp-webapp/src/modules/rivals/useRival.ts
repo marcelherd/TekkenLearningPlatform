@@ -13,5 +13,5 @@ async function findById(id: string | number) {
 export default function useRival(id?: string | number) {
   const router = useRouter();
   const rivalId = id ?? (router.query.id as string); // FIXME: this is "undefined" on the first render
-  return useQuery<Rival, Error>(['rival', id], () => findById(rivalId));
+  return useQuery<Rival, Error>(['rival', rivalId], () => findById(rivalId));
 }
