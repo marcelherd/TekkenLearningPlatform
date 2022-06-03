@@ -17,7 +17,7 @@ const MatchHistory: NextPageWithLayout = () => {
 
   return (
     <>
-      <Text>Showing your top 10 most played opponents.</Text>
+      <Text>Showing your latest 10 matches. Click on a match to get more information.</Text>
       <Space h="md" />
       {matches && <MatchesTable matches={matches} />}
     </>

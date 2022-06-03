@@ -38,7 +38,7 @@ export default function Navigator() {
       <Navbar.Section grow mt="md">
         <Box>{links}</Box>
       </Navbar.Section>
-      <Navbar.Section mt="md">
+      <Navbar.Section sx={{ width: 230, position: 'fixed', bottom: 10 }}>
         <Text align="center">
           Made by{' '}
           <Anchor target="_blank" href="https://steamcommunity.com/id/shishigami/">

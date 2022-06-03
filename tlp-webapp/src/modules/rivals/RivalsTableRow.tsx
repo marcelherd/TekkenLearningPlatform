@@ -21,7 +21,7 @@ export default function RivalsTableRow({ rival }: RivalsTableRowProps) {
       <td>{wins}</td>
       <td>{losses}</td>
       <td>{draws}</td>
-      <td>{winrate}%</td>
+      <td>{winrate}</td>
       <td>
         <Anchor href={`/history/${lastPlayedId}`}>{dateText}</Anchor>
       </td>
