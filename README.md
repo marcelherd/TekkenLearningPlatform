@@ -78,7 +78,9 @@ TekkenLearningPlatform keeps track of your matches and provides statistics to he
 
 ## Great, how do I use it?
 
-Please refer to the [installation instructions](https://github.com/marcelherd/TekkenLearningPlatform/wiki/User-Guide#installation).
+TL;DR: Download latest [tlp_win64.zip](https://github.com/marcelherd/TekkenLearningPlatform/releases), unpack it, start up Tekken 7, *then* doubleclick `start_all.bat`.
+
+Please refer to the [installation instructions](https://github.com/marcelherd/TekkenLearningPlatform/wiki/User-Guide#installation) for advanced use cases.
 
 ## Development
 
