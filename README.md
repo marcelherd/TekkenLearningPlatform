@@ -78,7 +78,7 @@ TekkenLearningPlatform keeps track of your matches and provides statistics to he
 
 ## Great, how do I use it?
 
-Please refer to the [installation instructions](https://github.com/marcelherd/TekkenLearningPlatform/wiki/Installation).
+Please refer to the [installation instructions]([https://github.com/marcelherd/TekkenLearningPlatform/wiki/Installation](https://github.com/marcelherd/TekkenLearningPlatform/wiki/User-Guide#installation)).
 
 ## Development
 
