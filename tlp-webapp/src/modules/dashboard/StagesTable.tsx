@@ -1,14 +1,24 @@
-import { Table } from '@mantine/core';
+import { Loader, Table } from '@mantine/core';
 
-import { Stage } from '@/lib/types';
+import Error from '@/components/common/Error';
 
 import StagesTableRow from './StagesTableRow';
+import useCharacterSummary from './useCharacterSummary';
 
-export interface StagesTableProps {
-  stages: Stage[];
-}
+export interface StagesTableProps {}
 
-export default function StagesTable({ stages }: StagesTableProps) {
+export default function StagesTable(props: StagesTableProps) {
+  const { data: characterSummary, error, isLoading, isIdle, isError } = useCharacterSummary();
+
+  if (isLoading || isIdle) {
+    return <Loader variant="dots" />;
+  }
+
+  if (isError) {
+    return <Error error={error} />;
+  }
+
+  const { stages } = characterSummary;
   const rows = stages.map((stage) => <StagesTableRow key={stage.name} stage={stage} />);
 
   return (

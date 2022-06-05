@@ -1,13 +1,25 @@
-import { Table } from '@mantine/core';
-import { Match } from '@prisma/client';
+import { Loader, Table } from '@mantine/core';
+
+import Error from '@/components/common/Error';
 
 import MatchesTableRow from './MatchesTableRow';
+import useMatches from './useMatches';
 
 export interface MatchesTableProps {
-  matches: Match[];
+  character?: string;
 }
 
-export default function MatchesTable({ matches }: MatchesTableProps) {
+export default function MatchesTable({ character }: MatchesTableProps) {
+  const { data: matches, error, isLoading, isIdle, isError } = useMatches(character);
+
+  if (isLoading || isIdle) {
+    return <Loader variant="dots" />;
+  }
+
+  if (isError) {
+    return <Error error={error} />;
+  }
+
   const rows = matches.map((match) => <MatchesTableRow key={match.id} match={match} />);
 
   return (

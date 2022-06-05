@@ -4,9 +4,6 @@ export * from './CharactersTable';
 export { default as CharactersTableRow } from './CharactersTableRow';
 export * from './CharactersTableRow';
 
-export { default as CharacterPerformance } from './CharacterPerformance';
-export * from './CharacterPerformance';
-
 export { default as CharacterOverview } from './CharacterOverview';
 export * from './CharacterOverview';
 

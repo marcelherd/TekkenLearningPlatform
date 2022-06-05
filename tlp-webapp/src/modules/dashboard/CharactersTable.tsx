@@ -1,14 +1,23 @@
-import { Table } from '@mantine/core';
+import { Loader, Table } from '@mantine/core';
 
-import { Character } from '@/lib/types';
+import Error from '@/components/common/Error';
 
 import CharactersTableRow from './CharactersTableRow';
+import useCharacters from './useCharacters';
 
-export interface CharactersTableProps {
-  characters: Character[];
-}
+export interface CharactersTableProps {}
 
-export default function CharactersTable({ characters }: CharactersTableProps) {
+export default function CharactersTable(props: CharactersTableProps) {
+  const { data: characters, error, isLoading, isIdle, isError } = useCharacters();
+
+  if (isLoading || isIdle) {
+    return <Loader variant="dots" />;
+  }
+
+  if (isError) {
+    return <Error error={error} />;
+  }
+
   const rows = characters.map((character) => (
     <CharactersTableRow key={character.name} character={character} />
   ));

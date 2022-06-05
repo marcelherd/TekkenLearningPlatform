@@ -5,9 +5,9 @@ import Error from '@/components/common/Error';
 import SettingsForm, { useSettings } from '@/modules/settings';
 
 const Settings: NextPageWithLayout = () => {
-  const { data: settings, error, isLoading, isError } = useSettings();
+  const { data: settings, error, isLoading, isIdle, isError } = useSettings();
 
-  if (isLoading) {
+  if (isLoading || isIdle) {
     return <Loader variant="dots" />;
   }
 
@@ -19,7 +19,7 @@ const Settings: NextPageWithLayout = () => {
     <>
       <Text>Showing your top 10 most played opponents.</Text>
       <Space h="md" />
-      {settings && <SettingsForm settings={settings} />}
+      <SettingsForm settings={settings} />
     </>
   );
 };

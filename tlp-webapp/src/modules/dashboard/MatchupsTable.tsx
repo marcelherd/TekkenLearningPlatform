@@ -1,14 +1,25 @@
-import { Table } from '@mantine/core';
+import { Loader, Table } from '@mantine/core';
 
+import Error from '@/components/common/Error';
 import { Matchup } from '@/lib/types';
 
 import MatchupsTableRow from './MatchupsTableRow';
+import useCharacterSummary from './useCharacterSummary';
 
-export interface MatchupsTableProps {
-  matchups: Matchup[];
-}
+export interface MatchupsTableProps {}
 
-export default function MatchupsTable({ matchups }: MatchupsTableProps) {
+export default function MatchupsTable(props: MatchupsTableProps) {
+  const { data: characterSummary, error, isLoading, isIdle, isError } = useCharacterSummary();
+
+  if (isLoading || isIdle) {
+    return <Loader variant="dots" />;
+  }
+
+  if (isError) {
+    return <Error error={error} />;
+  }
+
+  const { matchups } = characterSummary;
   const rows = matchups.map((matchup) => (
     <MatchupsTableRow key={matchup.character} matchup={matchup} />
   ));

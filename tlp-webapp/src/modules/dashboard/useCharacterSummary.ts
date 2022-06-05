@@ -10,8 +10,9 @@ async function findByName(name: string) {
   return data;
 }
 
+// TODO: Split this up
 export default function useCharacterSummary(characterName?: string) {
   const router = useRouter();
-  const name = characterName ?? (router.query.character as string); // FIXME: this is "undefined" on the first render
+  const name = characterName ?? (router.query.character as string);
   return useQuery<CharacterSummary, Error>(['character', name], () => findByName(name));
 }

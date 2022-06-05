@@ -1,8 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 import db from '@/lib/database';
-import { CharacterSummary, Character, Matchup, Stage } from '@/lib/types';
+import { CharacterSummary, Matchup, Stage } from '@/lib/types';
 
+// TODO: Split this up
 export default async function handler(req: NextApiRequest, res: NextApiResponse<CharacterSummary>) {
   const limit = Number(req.query.limit);
   const characterName = req.query.character as string;

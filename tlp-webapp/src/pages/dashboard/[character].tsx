@@ -1,21 +1,46 @@
-import { Loader } from '@mantine/core';
+import { useRouter } from 'next/router';
+
+import { Title } from '@mantine/core';
 
 import { NextPageWithLayout } from '@/lib/types';
-import Error from '@/components/common/Error';
-import { CharacterPerformance, useCharacterSummary } from '@/modules/dashboard';
+import { CharacterOverview, MatchupsTable, StagesTable } from '@/modules/dashboard';
+import { MatchesTable } from '@/modules/matchHistory';
+import PageTitle from '@/components/common/PageTitle';
+import Breadcrumbs from '@/components/common/Breadcrumbs';
 
 const CharacterDetail: NextPageWithLayout = () => {
-  const { data: characterSummary, error, isLoading, isError } = useCharacterSummary();
+  const router = useRouter();
+  const character = router.query.character as string;
 
-  if (isLoading) {
-    return <Loader variant="dots" />;
-  }
+  const pageTitle = character;
+  const breadcrumbs = [
+    { label: 'Dashboard', path: '/dashboard' },
+    { label: character, path: `/dashboard/${character}` },
+  ];
 
-  if (isError) {
-    return <Error error={error} />;
-  }
+  return (
+    <>
+      <Breadcrumbs breadcrumbs={breadcrumbs} />
+      <PageTitle>{pageTitle}</PageTitle>
 
-  return <>{characterSummary && <CharacterPerformance characterSummary={characterSummary} />}</>;
+      <CharacterOverview />
+
+      <Title order={3} mb={12} mt={24}>
+        Latest matches
+      </Title>
+      <MatchesTable character={character} />
+
+      <Title order={3} mb={12} mt={24}>
+        Matchups
+      </Title>
+      <MatchupsTable />
+
+      <Title order={3} mb={12} mt={24}>
+        Stages
+      </Title>
+      <StagesTable />
+    </>
+  );
 };
 
 export default CharacterDetail;

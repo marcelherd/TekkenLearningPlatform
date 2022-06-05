@@ -1,14 +1,24 @@
-import { Box, Image, Text } from '@mantine/core';
+import { Box, Image, Loader, Text } from '@mantine/core';
 
-import { Character } from '@/lib/types';
+import Error from '@/components/common/Error';
 import { getWinrateText } from '@/lib/util';
 
-export interface CharacterOverviewProps {
-  character: Character;
-}
+import useCharacterSummary from './useCharacterSummary';
 
-export default function CharacterOverview({ character }: CharacterOverviewProps) {
-  const { name, games, wins, losses, draws } = character;
+export interface CharacterOverviewProps {}
+
+export default function CharacterOverview(props: CharacterOverviewProps) {
+  const { data: characterSummary, error, isLoading, isIdle, isError } = useCharacterSummary();
+
+  if (isLoading || isIdle) {
+    return <Loader variant="dots" />;
+  }
+
+  if (isError) {
+    return <Error error={error} />;
+  }
+
+  const { name, games, wins, losses, draws } = characterSummary.character;
   const winrate = getWinrateText(wins, losses);
 
   return (

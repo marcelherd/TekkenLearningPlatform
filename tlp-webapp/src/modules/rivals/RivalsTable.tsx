@@ -1,14 +1,23 @@
-import { Table } from '@mantine/core';
+import { Loader, Table } from '@mantine/core';
 
-import { Rival } from '@/lib/types';
+import Error from '@/components/common/Error';
 
 import RivalsTableRow from './RivalsTableRow';
+import useRivals from './useRivals';
 
-export interface RivalsTableProps {
-  rivals: Rival[];
-}
+export interface RivalsTableProps {}
 
-export default function RivalsTable({ rivals }: RivalsTableProps) {
+export default function RivalsTable(props: RivalsTableProps) {
+  const { data: rivals, error, isLoading, isIdle, isError } = useRivals();
+
+  if (isLoading || isIdle) {
+    return <Loader variant="dots" />;
+  }
+
+  if (isError) {
+    return <Error error={error} />;
+  }
+
   const rows = rivals.map((rival) => <RivalsTableRow key={rival.name} rival={rival} />);
 
   return (
