@@ -5,8 +5,8 @@ import { OAuth2Client } from 'googleapis/node_modules/google-auth-library';
 import db from '@/database';
 import log from '@/helpers/log';
 import Broker from '@/recording/obs/broker';
-import getLatestVideoPath, { removeLatestVideo, scheduleRename } from '@/recording/util';
-import uploadLatestVideo from '@/recording/youtube/uploader';
+import { removeLatestVideo, scheduleRename } from '@/recording/util';
+import uploadLatestVideo, { uploadVideo } from '@/recording/youtube/uploader';
 import getAuthenticatedClient from '@/recording/youtube/auth';
 import GameState from '@/tekken/state';
 import {
@@ -82,28 +82,7 @@ const onMatchEnd = async ({ match, score }: MatchEndEventData) => {
       await obs.stopRecording();
       await obs.clearAllText();
 
-      if (config.ENABLE_VIDEO_UPLOAD) {
-        log.info('Uploading recording to YouTube. Please do not exit.');
-
-        const { player, opponent } = match;
-
-        // Grace period for OBS to finish saving the recording
-        setTimeout(
-          (matchIds: number[]) => {
-            // Will automatically delete the file locally after the upload is finished
-            // If the flag CLEANUP_ENABLED is set
-            uploadLatestVideo(
-              googleClient,
-              {
-                title: `Me (${player.character}) vs ${opponent.name} (${opponent.character})`,
-              },
-              matchIds, // TODO: this should be handled here instead but whatever
-            );
-          },
-          config.OBS_UPLOAD_DELAY,
-          batchMatchIds,
-        );
-      }
+      let renamedFilePath: string | null = null;
 
       // If each match has its own recording, we can rename the recording file to be more descriptive
       if (config.OBS_BATCH_SIZE === 1) {
@@ -116,7 +95,41 @@ const onMatchEnd = async ({ match, score }: MatchEndEventData) => {
         // YYYY-MM-DD hh_mm_ss
         const date = new Date().toISOString().replace('T', ' ').replace(/:/g, '_').substring(0, 19);
         const newName = `${pChar} vs ${opChar} ${pRounds}-${opRounds} ${outcome} (${date})`;
-        scheduleRename(newName);
+        renamedFilePath = await scheduleRename(newName);
+      }
+
+      if (config.ENABLE_VIDEO_UPLOAD) {
+        log.info('Uploading recording to YouTube. Please do not exit.');
+
+        const { player, opponent } = match;
+
+        // Grace period for OBS to finish saving the recording
+        setTimeout(
+          (matchIds: number[], path: string | null) => {
+            const title = `Me (${player.character}) vs ${opponent.name} (${opponent.character})`;
+            if (path) {
+              uploadVideo(
+                googleClient,
+                path,
+                {
+                  title,
+                },
+                matchIds, // TODO: this should not be handled here instead but whatever
+              );
+            } else {
+              uploadLatestVideo(
+                googleClient,
+                {
+                  title,
+                },
+                matchIds, // TODO: this should not be handled here instead but whatever
+              );
+            }
+          },
+          config.OBS_UPLOAD_DELAY,
+          batchMatchIds,
+          renamedFilePath,
+        );
       }
 
       currentBatchSize = 0;

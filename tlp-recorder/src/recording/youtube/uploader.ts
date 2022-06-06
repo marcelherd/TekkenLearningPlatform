@@ -9,7 +9,7 @@ import config from '@/config';
 import getLatestVideoPath, { scheduleCleanup } from '@/recording/util';
 import { VideoOptions } from '@/types/types';
 
-async function uploadVideo(
+export async function uploadVideo(
   client: OAuth2Client,
   path: string,
   options: VideoOptions,

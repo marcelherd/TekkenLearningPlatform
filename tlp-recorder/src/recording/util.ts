@@ -32,24 +32,28 @@ export function removeLatestVideo() {
   }
 }
 
-export function scheduleRename(newFileName: string, pathToExistingFile?: string) {
-  setTimeout(() => {
-    try {
-      const filePathToRename = pathToExistingFile ?? getLatestVideoPath();
-      if (filePathToRename) {
-        const folder = path.dirname(filePathToRename);
-        const extension = path.extname(filePathToRename);
-        const newFileNameExt = newFileName + extension;
-        const newFilePath = path.join(folder, newFileNameExt);
-        fs.renameSync(filePathToRename, newFilePath);
-        log.debug(`Renamed ${filePathToRename} to ${newFileNameExt}`);
+export function scheduleRename(newFileName: string, pathToExistingFile?: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      try {
+        const filePathToRename = pathToExistingFile ?? getLatestVideoPath();
+        if (filePathToRename) {
+          const folder = path.dirname(filePathToRename);
+          const extension = path.extname(filePathToRename);
+          const newFileNameExt = newFileName + extension;
+          const newFilePath = path.join(folder, newFileNameExt);
+          fs.renameSync(filePathToRename, newFilePath);
+          log.debug(`Renamed ${filePathToRename} to ${newFileNameExt}`);
+          resolve(newFilePath);
+        }
+      } catch (err) {
+        if (err instanceof Error) {
+          log.error(`Failed to rename recording: ${err.message}`);
+        } else {
+          log.error('Failed to rename recording', err);
+        }
+        reject(err);
       }
-    } catch (err) {
-      if (err instanceof Error) {
-        log.error(`Failed to rename recording: ${err.message}`);
-      } else {
-        log.error('Failed to rename recording', err);
-      }
-    }
-  }, config.OBS_CLEANUP_DELAY);
+    }, config.OBS_CLEANUP_DELAY);
+  });
 }
