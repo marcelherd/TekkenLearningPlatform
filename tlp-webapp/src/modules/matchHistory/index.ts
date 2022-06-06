@@ -10,3 +10,5 @@ export * from './MatchVideo';
 export { default as useMatch } from './useMatch';
 
 export { default as useMatches } from './useMatches';
+
+export { default as useDeleteMatch } from './useDeleteMatch';

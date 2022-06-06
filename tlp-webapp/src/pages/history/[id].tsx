@@ -1,15 +1,20 @@
-import { Loader, Text } from '@mantine/core';
+import { useRouter } from 'next/router';
+
+import { Loader, Space, Text } from '@mantine/core';
 
 import { NextPageWithLayout } from '@/lib/types';
 import Error from '@/components/common/Error';
-import { MatchVideo, useMatch } from '@/modules/matchHistory';
+import { MatchVideo, useMatch, useDeleteMatch } from '@/modules/matchHistory';
 import { getDateText } from '@/lib/util';
 import Breadcrumbs from '@/components/common/Breadcrumbs';
 import PageTitle from '@/components/common/PageTitle';
 import Outcome from '@/components/common/Outcome';
+import DeleteButtonWithConfirmation from '@/components/common/DeleteButtonWithConfirmation';
 
 const MatchHistoryDetail: NextPageWithLayout = () => {
+  const router = useRouter();
   const { data: match, error, isLoading, isIdle, isError } = useMatch();
+  const { mutateAsync: deleteMatch, error: deleteError } = useDeleteMatch();
 
   if (isLoading || isIdle) {
     return <Loader variant="dots" />;
@@ -27,6 +32,19 @@ const MatchHistoryDetail: NextPageWithLayout = () => {
     { label: `Match ${id}`, path: `/history/${id}` },
   ];
 
+  const handleDelete = async () => {
+    try {
+      await deleteMatch();
+      if (!deleteError) {
+        router.back();
+      } else {
+        console.error('Could not delete match', deleteError);
+      }
+    } catch (err) {
+      console.error('Could not delete match', err, deleteError);
+    }
+  };
+
   return (
     <>
       <Breadcrumbs breadcrumbs={breadcrumbs} />
@@ -37,6 +55,8 @@ const MatchHistoryDetail: NextPageWithLayout = () => {
       </Text>
       <Text>Stage: {stage}</Text>
       <MatchVideo match={match} />
+      <Space h="md" />
+      <DeleteButtonWithConfirmation label="Flag false positive" callback={handleDelete} />
     </>
   );
 };
