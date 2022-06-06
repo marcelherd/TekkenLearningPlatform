@@ -27,6 +27,7 @@ let googleClient: OAuth2Client;
 let currentBatchSize: number = 0;
 let batchMatchIds: number[] = [];
 let recordingPaused: boolean = false;
+let previousTickData: TickEventData;
 
 const onMatchStart = async ({ match }: MatchStartEventData) => {
   // FIXME: Sometimes this gets called twice - once without data
@@ -138,6 +139,7 @@ const onMatchUnresolved = async (data: MatchUnresolvedEventData) => {
   if (config.ENABLE_VIDEO_RECORD) {
     log.debug('Match ended early, stop recording');
     await obs.stopRecording();
+    await obs.clearAllText();
 
     // Grace period for OBS to finish saving the recording
     setTimeout(() => {
@@ -150,7 +152,11 @@ const onGameTick = async (data: TickEventData) => {
   log.silly('onGameTick', data);
 
   if (config.ENABLE_NOTATION_SYNC) {
-    await obs.updateMetadataFromTick(data);
+    if (previousTickData) {
+      await obs.updateMetadataFromTick(data, previousTickData);
+    }
+
+    previousTickData = data;
   }
 };
 

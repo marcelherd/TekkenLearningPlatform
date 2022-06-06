@@ -55,11 +55,17 @@ export default class Broker {
     return this.obs.call('GetRecordStatus');
   }
 
-  async updateMetadataFromTick(data: TickEventData) {
+  async updateMetadataFromTick(data: TickEventData, previousTickData: TickEventData) {
     const { playerInput, opponentInput } = data;
+    const { playerInput: prevPlayerInput, opponentInput: prevOpponentInput } = previousTickData;
 
-    await this.updateText('p1move', getNotation(playerInput));
-    await this.updateText('p2move', getNotation(opponentInput));
+    if (playerInput.attack !== '' && playerInput.attack !== prevPlayerInput.attack) {
+      await this.updateText('p1move', getNotation(playerInput));
+    }
+
+    if (opponentInput.attack !== '' && opponentInput.attack !== prevOpponentInput.attack) {
+      await this.updateText('p2move', getNotation(opponentInput));
+    }
   }
 
   async updateText(sourceName: string, text: string): Promise<void> {
