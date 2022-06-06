@@ -12,10 +12,10 @@ export function isNumeric(str: string) {
   return !Number.isNaN(parseFloat(str)) && isFinite(Number(str));
 }
 
-export function getWinrateText(wins: number, losses: number) {
+export function getWinrateText(wins: number, losses: number, precision: number = 2) {
   const games = wins + losses;
   const winrate = (wins / games) * 100;
-  return `${winrate.toFixed(2)}%`;
+  return `${winrate.toFixed(precision)}%`;
 }
 
 export function getDateText(date: string | Date) {

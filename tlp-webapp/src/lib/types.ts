@@ -16,43 +16,20 @@ export interface Breadcrumb {
   path: string;
 }
 
-export interface Rival {
+export interface Rival extends MatchesPlayed, LastMatchPlayed {
   name: string;
-  wins: number;
-  losses: number;
-  draws: number;
-  lastPlayed: Date;
-  lastPlayedId: number;
 }
 
-export interface Matchup {
+export interface Matchup extends MatchesPlayed, LastMatchPlayed {
   character: string;
-  games: number;
-  wins: number;
-  losses: number;
-  draws: number;
-  lastPlayed: Date;
-  lastPlayedId: number;
 }
 
-export interface Stage {
+export interface Stage extends MatchesPlayed, LastMatchPlayed {
   name: string;
-  games: number;
-  wins: number;
-  losses: number;
-  draws: number;
-  lastPlayed: Date;
-  lastPlayedId: number;
 }
 
-export interface Character {
+export interface Character extends MatchesPlayed, LastMatchPlayed {
   name: string;
-  games: number;
-  wins: number;
-  losses: number;
-  draws: number;
-  lastPlayed: Date;
-  lastPlayedId: number;
 }
 
 export interface CharacterSummary {
@@ -85,4 +62,30 @@ export interface RecorderSettings {
   cleanupDelay: number;
   logLevel: 'verbose' | 'info';
   tickInterval: number;
+}
+
+export interface LastMatchPlayed {
+  lastPlayed: Date;
+  lastPlayedId: number;
+}
+
+export interface MatchesPlayed {
+  games: number;
+  wins: number;
+  losses: number;
+  draws: number;
+}
+
+export interface CharacterMatchesPlayed extends MatchesPlayed {
+  name: string;
+}
+
+export interface WeeklyPerformance extends MatchesPlayed {
+  characters: CharacterMatchesPlayed[];
+}
+
+export interface WeeklyPerformanceResponse {
+  thisWeek: WeeklyPerformance;
+  lastWeek: WeeklyPerformance;
+  twoWeeksAgo: WeeklyPerformance;
 }
