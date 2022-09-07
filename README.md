@@ -1,6 +1,7 @@
 <div align="center">
   <h1>TekkenLearningPlatform</h1>
   <p>Keeps track of your matches and provides statistics to help you improve as a player</p>
+  <p><b>Currently not functional!</b> As of the newest update Ver. 5.00 the memory addresses are no longer correct and have to be updated. I am open to pull requests but I will not be fixing this myself anytime soon.</p>
   
   <a href="https://github.com/marcelherd/TekkenLearningPlatform/commits/master">
     <img src="https://img.shields.io/github/last-commit/marcelherd/TekkenLearningPlatform" alt="Last commit" />
